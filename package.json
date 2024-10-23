@@ -1,0 +1,49 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "lint": "eslint . --cache",
+    "lint:fix": "eslint . --fix --cache",
+    "format": "prettier . --write"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.35.3",
+    "element-plus": "^2.8.6",
+    "mysql2": "^3.11.3",
+    "nuxt": "^3.13.2",
+    "vue": "latest",
+    "vue-router": "latest"
+  },
+  "devDependencies": {
+    "@element-plus/nuxt": "^1.0.10",
+    "@nuxt/devtools": "^1.6.0",
+    "@sunshj/eslint-config": "^2.1.2",
+    "@sunshj/prettier-config": "^1.0.1",
+    "@unocss/nuxt": "^0.63.6",
+    "drizzle-kit": "^0.26.2",
+    "eslint": "9.10.0",
+    "lint-staged": "15",
+    "prettier": "^3.3.3",
+    "simple-git-hooks": "^2.11.1",
+    "unocss": "^0.63.6",
+    "unplugin-vue-router": "^0.10.8"
+  },
+  "lint-staged": {
+    "*.{vue,js,ts}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "prettier": "@sunshj/prettier-config",
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
+  }
+}
