@@ -18,6 +18,9 @@
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
 
+const commentStore = useCommentStore()
+const userSession = useUserSession()
+
 const props = defineProps<{
   parentId?: number
 }>()
@@ -45,15 +48,17 @@ function send() {
     await $fetch('/api/comment', {
       method: 'POST',
       body: {
-        userId: store.loggedInUser?.id,
+        userId: userSession.user.value?.id,
         parentId: props.parentId ?? 0,
         content: form.message
       }
+    }).catch(error => {
+      ElMessage.error(error.message)
     })
 
     form.message = ''
-    store.incrementRefreshCount()
-    store.setChildCommentInputVisible(false)
+    commentStore.refresh()
+    commentStore.setCommentInputVisible(false)
   })
 }
 </script>

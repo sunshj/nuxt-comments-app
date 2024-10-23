@@ -11,6 +11,6 @@ export default defineConfig([
     }
   },
   {
-    ignores: ['server/database/migrations']
+    ignores: ['prisma/migrations']
   }
 ])

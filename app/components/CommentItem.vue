@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { CommentItem } from './ChildComments.vue'
+const commentStore = useCommentStore()
 
 const props = defineProps<{
   data: CommentItem
@@ -34,15 +34,15 @@ const props = defineProps<{
 const { id, user, content, parentId } = toRefs(props.data)
 
 const replyInputVisible = computed(
-  () => store.childCommentInputVisible && store.currentReplyId === id.value
+  () => commentStore.commentInputVisible && commentStore.currentReplyId === id.value
 )
 
 function showReplyInput() {
   if (replyInputVisible.value) {
-    store.setChildCommentInputVisible(false)
+    commentStore.setCommentInputVisible(false)
   } else {
-    store.setChildCommentInputVisible(true)
-    store.setCurrentReplyId(id.value)
+    commentStore.setCommentInputVisible(true)
+    commentStore.setCurrentReplyId(id.value)
   }
 }
 </script>

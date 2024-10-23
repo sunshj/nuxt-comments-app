@@ -1,3 +1,6 @@
+import type { Comment, User } from '@prisma/client'
+import type { ZodError } from 'zod'
+
 export type TreeItem<T> = T & { children?: Array<TreeItem<T>> }
 
 export function toTree<T extends object, K extends keyof T, P extends keyof T>(
@@ -26,4 +29,10 @@ export function toTree<T extends object, K extends keyof T, P extends keyof T>(
   }
 
   return tree
+}
+
+export type CommentItem = Comment & { user: User } & { children?: Array<TreeItem<CommentItem>> }
+
+export function extractZodError(error: ZodError) {
+  return error.errors.map(err => err.message).join(', ')
 }

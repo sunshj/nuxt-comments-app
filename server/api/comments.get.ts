@@ -1,23 +1,19 @@
-import { desc, eq } from 'drizzle-orm'
-
 export default defineEventHandler(async () => {
-  const db = useDrizzle()
-  const comments = await db
-    .select({
-      comment: tables.comments,
+  const comments = await prisma.comment.findMany({
+    include: {
       user: {
-        id: tables.users.id,
-        name: tables.users.name,
-        avatar: tables.users.avatar
+        select: {
+          id: true,
+          name: true,
+          email: true
+        }
       }
-    })
-    .from(tables.comments)
-    .leftJoin(tables.users, eq(tables.comments.userId, tables.users.id))
-    .orderBy(desc(tables.comments.createdAt))
+    },
+    orderBy: {
+      createdAt: 'asc'
+    }
+  })
 
-  if (!comments?.length) return []
-  const flattenComments = comments.map(({ comment, user }) => ({ ...comment, user })) ?? []
-
-  const result = toTree(flattenComments, 'id', 'parentId')
+  const result = toTree(comments, 'id', 'parentId')
   return result
 })
