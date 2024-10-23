@@ -16,7 +16,7 @@ export default defineNuxtConfig({
     '@element-plus/nuxt',
     '@nuxt/devtools',
     '@pinia/nuxt',
-    '@pinia-plugin-persistedstate/nuxt',
+    'pinia-plugin-persistedstate/nuxt',
     'nuxt-auth-utils'
   ],
 
