@@ -20,7 +20,7 @@ export default defineNuxtConfig({
     'nuxt-auth-utils'
   ],
 
-  piniaPersistedstate: {
+  piniaPluginPersistedstate: {
     storage: 'cookies'
   },
 

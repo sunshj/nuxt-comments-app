@@ -17,11 +17,15 @@ export default defineEventHandler(async event => {
       update: {},
       create: { name, email }
     })
-    .catch(() => {
-      throw createError({
-        statusCode: 500,
-        statusMessage: 'user is existed'
-      })
+    .catch(error => {
+      if (error.code === 'P2002') {
+        throw createError({
+          statusCode: 500,
+          statusMessage: 'user is existed'
+        })
+      }
+
+      throw error
     })
 
   await setUserSession(event, {
