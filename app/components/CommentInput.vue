@@ -4,12 +4,19 @@
     :model="form"
     :rules="formRules"
     class="border border-amber rounded-lg border-solid p-2"
+    @submit.prevent
   >
     <ElFormItem prop="message">
-      <ElInput v-model="form.message" type="textarea" :rows="2" placeholder="请输入内容" />
+      <ElInput
+        v-model="form.message"
+        type="textarea"
+        :rows="2"
+        placeholder="请输入内容，Ctrl + Enter 发送"
+        @keydown.ctrl.enter="send()"
+      />
     </ElFormItem>
 
-    <div class="w-full flex justify-between">
+    <div class="w-full flex justify-end">
       <ElButton type="primary" @click="send()">评论</ElButton>
     </div>
   </ElForm>
