@@ -8,20 +8,21 @@ const createUserSchema = z.object({
 export default defineEventHandler(async event => {
   const { error, data } = await readValidatedBody(event, createUserSchema.safeParse)
 
-  if (error) throw createError(extractZodError(error))
+  if (error) throw createBadRequestError(error)
   const { name, email } = data
+  const avatarUrl = getGravatarUrl(email)
 
   const user = await prisma.user
     .upsert({
       where: { email },
       update: {},
-      create: { name, email }
+      create: { name, email, avatarUrl }
     })
     .catch(error => {
       if (error.code === 'P2002') {
         throw createError({
           statusCode: 500,
-          statusMessage: 'user is existed'
+          statusMessage: 'user/email already exists'
         })
       }
 
@@ -31,8 +32,7 @@ export default defineEventHandler(async event => {
   await setUserSession(event, {
     user: {
       id: user.id,
-      name: user.name,
-      email: user.email
+      role: user.role
     },
     loggedInAt: new Date()
   })

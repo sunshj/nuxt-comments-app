@@ -1,9 +1,9 @@
+import { createHash } from 'node:crypto'
 import type { Comment, User } from '@prisma/client'
-import type { ZodError } from 'zod'
 
 export type TreeItem<T> = T & { children?: Array<TreeItem<T>> }
 
-export function toTree<T extends object, K extends keyof T, P extends keyof T>(
+export function buildTree<T extends object, K extends keyof T, P extends keyof T>(
   array: T[],
   key: K,
   parentKey: P
@@ -31,8 +31,17 @@ export function toTree<T extends object, K extends keyof T, P extends keyof T>(
   return tree
 }
 
-export type CommentItem = Comment & { user: User } & { children?: Array<TreeItem<CommentItem>> }
+export type WithSerializedDates<T> = T extends Date
+  ? string
+  : T extends Array<infer R>
+    ? Array<WithSerializedDates<R>>
+    : T extends object
+      ? { [K in keyof T]: WithSerializedDates<T[K]> }
+      : T
 
-export function extractZodError(error: ZodError) {
-  return error.errors.map(err => err.message).join(', ')
+export type CommentItem = WithSerializedDates<TreeItem<Comment & { user: Omit<User, 'createdAt'> }>>
+
+export function getGravatarUrl(email: string) {
+  const hash = createHash('sha256').update(email).digest('hex')
+  return `https://www.gravatar.com/avatar/${hash}?s=40&d=identicon`
 }

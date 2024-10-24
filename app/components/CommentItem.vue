@@ -1,13 +1,15 @@
 <template>
-  <div class="border border-red rounded-md border-solid p-2">
+  <div class="rounded-md p-2">
     <div class="flex flex-col gap-2">
       <div class="flex justify-between">
         <div class="flex gap-2 text-sm">
-          <ElAvatar size="small" class="text-gray-500">
-            {{ user?.name.slice(0, 3) }}
-          </ElAvatar>
-          <div class="text-red-500">{{ user?.name }}</div>
-          <div>#{{ id }}</div>
+          <div :id="`comment-${id}`" class="text-gray-600 font-bold">{{ user?.name }}</div>
+          <ClientOnly>
+            <div class="text-gray-500">{{ timeAgo(createdAt) }}</div>
+          </ClientOnly>
+          <DevOnly>
+            <div class="text-gray-500">#{{ id }}</div>
+          </DevOnly>
         </div>
 
         <div class="flex text-sm">
@@ -17,27 +19,63 @@
         </div>
       </div>
 
-      <div class="text-gray-500">
+      <div class="text-black">
         <span v-if="parentId" class="text-blue"> 回复 #{{ parentId }}：</span>
         {{ content }}
       </div>
     </div>
-    <CommentInput v-if="replyInputVisible" :parent-id="id" class="my-2" />
+
+    <CommentInput v-if="replyInputVisible" ref="inputRef" :parent-id="id" class="my-2" />
+
+    <ClientOnly>
+      <ElTooltip
+        v-if="previewMode"
+        v-model:visible="tooltipVisible"
+        virtual-triggering
+        :virtual-ref="triggerRef"
+        placement="left-end"
+        effect="dark"
+        content="Comment is Here"
+      />
+    </ClientOnly>
   </div>
 </template>
 
 <script lang="ts" setup>
+import type { Measurable } from 'element-plus'
+
+const route = useRoute()
 const commentStore = useCommentStore()
 
 const props = defineProps<{
   data: CommentItem
 }>()
 
-const { id, user, content, parentId } = toRefs(reactive(props.data))
+const { id, user, content, parentId, createdAt } = toRefs(reactive(props.data))
+
+const previewMode = computed(() => route.hash === `#comment-${id.value}`)
+
+const tooltipVisible = ref(false)
+const position = ref({})
+const triggerRef = ref<Measurable>({
+  getBoundingClientRect() {
+    return JSON.parse(JSON.stringify(position.value))
+  }
+})
+
+watchEffect(() => {
+  if (route.hash === `#comment-${id.value}`) {
+    const el = document.querySelector(route.hash)
+    position.value = el!.getBoundingClientRect()
+    tooltipVisible.value = true
+  }
+})
 
 const replyInputVisible = computed(
   () => commentStore.commentInputVisible && commentStore.currentReplyId === id.value
 )
+
+const inputRef = ref()
 
 function showReplyInput() {
   if (replyInputVisible.value) {
@@ -45,6 +83,11 @@ function showReplyInput() {
   } else {
     commentStore.setCommentInputVisible(true)
     commentStore.setCurrentReplyId(id.value)
+
+    nextTick(() => {
+      const el = document.querySelector(`#comment-${parentId.value || id.value}`)
+      el?.scrollIntoView({ behavior: 'smooth' })
+    })
   }
 }
 </script>

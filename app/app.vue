@@ -1,9 +1,15 @@
 <template>
-  <NuxtLayout>
-    <NuxtLoadingIndicator />
-    <NuxtPage />
-  </NuxtLayout>
+  <ElConfigProvider :locale>
+    <NuxtLayout>
+      <NuxtLoadingIndicator />
+      <NuxtPage />
+    </NuxtLayout>
+  </ElConfigProvider>
 </template>
+
+<script lang="ts" setup>
+import locale from 'element-plus/es/locale/lang/zh-cn'
+</script>
 
 <style>
 * {

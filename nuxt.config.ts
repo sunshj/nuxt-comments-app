@@ -3,6 +3,12 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
 
+  app: {
+    head: {
+      titleTemplate: '%s | Nuxt Comments App'
+    }
+  },
+
   future: {
     compatibilityVersion: 4
   },
@@ -17,23 +23,11 @@ export default defineNuxtConfig({
     '@nuxt/devtools',
     '@pinia/nuxt',
     'pinia-plugin-persistedstate/nuxt',
-    'nuxt-auth-utils'
+    'nuxt-auth-utils',
+    '@vueuse/nuxt'
   ],
 
   piniaPluginPersistedstate: {
     storage: 'cookies'
-  },
-
-  nitro: {
-    routeRules: {
-      '/api/comment*': { auth: true }
-    }
   }
 })
-
-declare module 'nitropack' {
-  interface NitroRouteConfig {
-    /** Need authenticate */
-    auth?: boolean
-  }
-}

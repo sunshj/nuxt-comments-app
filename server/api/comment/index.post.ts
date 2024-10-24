@@ -7,8 +7,10 @@ const createCommentSchema = z.object({
 })
 
 export default defineEventHandler(async event => {
+  await requireUserSession(event)
+
   const { error, data } = await readValidatedBody(event, createCommentSchema.safeParse)
-  if (error) throw createError(extractZodError(error))
+  if (error) throw createBadRequestError(error)
   const { userId, parentId, content } = data
 
   return prisma.comment.create({
