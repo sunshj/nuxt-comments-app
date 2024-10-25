@@ -8,12 +8,12 @@
       </ElCol>
       <ElCol :span="6" :xs="24">
         <ElFormItem label="排序方式">
-          <ClientOnly>
-            <ElSelect v-model="sort">
+          <ElSelect v-model="sort">
+            <ClientOnly>
               <ElOption label="最新" value="desc" />
               <ElOption label="最早" value="asc" />
-            </ElSelect>
-          </ClientOnly>
+            </ClientOnly>
+          </ElSelect>
         </ElFormItem>
       </ElCol>
       <ElCol :span="6" :xs="24">
@@ -42,10 +42,10 @@
         <ElTableColumn v-if="hasAdminRole" type="selection" reserve-selection width="55" />
         <ElTableColumn prop="id" label="ID" width="80" />
         <ElTableColumn prop="user.name" label="name" width="120" />
-        <ElTableColumn prop="user.email" label="email" width="150" />
+        <ElTableColumn prop="user.email" label="email" width="180" />
         <ElTableColumn prop="user.role" label="role" width="100">
           <template #default="{ row }: { row: CommentItem }">
-            <ElTag v-if="row.user.role === Role.ADMIN" type="warning">{{ row.user.role }}</ElTag>
+            <ElTag v-if="row.user.role === 'ADMIN'" type="warning">{{ row.user.role }}</ElTag>
             <ElTag v-else type="primary">{{ row.user.role }}</ElTag>
           </template>
         </ElTableColumn>
@@ -73,6 +73,10 @@
           </template>
         </ElTableColumn>
       </ElTable>
+
+      <template #fallback>
+        <ElSkeleton :rows="10" animated />
+      </template>
     </ClientOnly>
     <ClientOnly>
       <ElPagination
@@ -81,19 +85,21 @@
         class="w-full flex-center overflow-x-auto"
         background
         :page-sizes="[10, 20, 50, 100]"
-        :total="comments?.length"
+        :total="total"
         layout="total, sizes, prev, pager, next, jumper"
       />
+      <template #fallback>
+        <ElSkeleton :rows="1" animated />
+      </template>
     </ClientOnly>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { Role } from '@prisma/client'
 import type { CommentItem } from '~~/server/utils'
 import type { TableInstance } from 'element-plus'
 
-useHead({
+useServerHead({
   title: 'Dashboard'
 })
 
@@ -103,12 +109,13 @@ definePageMeta({
 
 const { user } = useUserSession()
 
-const hasAdminRole = computed(() => user.value?.role === Role.ADMIN)
+const hasAdminRole = computed(() => user.value?.role === 'ADMIN')
 
 const tableRef = ref<TableInstance>()
 
 const currentPage = ref(1)
 const pageSize = ref(10)
+const total = computed(() => comments.value?.length ?? 0)
 const selections = ref<number[]>([])
 
 const search = ref('')

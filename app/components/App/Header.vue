@@ -21,6 +21,16 @@
             </ElDropdownMenu>
           </template>
         </ElDropdown>
+
+        <template #fallback>
+          <ElSkeleton animated class="flex-center">
+            <template #template>
+              <ElAvatar :src="userStore.user!.avatarUrl!" class="cursor-pointer">
+                {{ userStore.user?.name }}
+              </ElAvatar>
+            </template>
+          </ElSkeleton>
+        </template>
       </ClientOnly>
     </div>
   </ElHeader>

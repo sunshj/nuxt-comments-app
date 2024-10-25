@@ -24,7 +24,7 @@
 <script lang="ts" setup>
 import type { CommentItem } from '~~/server/utils'
 
-useHead({
+useServerHead({
   title: 'Home'
 })
 

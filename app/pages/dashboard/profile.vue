@@ -6,28 +6,28 @@
       </template>
     </ElPageHeader>
 
-    <ElForm class="rounded-md bg-white px-4 py-6" :model="form" @submit.prevent>
+    <ElForm v-if="userForm" class="rounded-md bg-white px-4 py-6" :model="userForm" @submit.prevent>
       <ElFormItem prop="name" label="Name">
-        <ElInput v-model="form.name" clearable />
+        <ElInput v-model="userForm.name" clearable />
       </ElFormItem>
       <ElFormItem prop="email" label="Email">
-        <ElInput v-model="form.email" clearable />
+        <ElInput v-model="userForm.email" clearable />
       </ElFormItem>
       <ElFormItem prop="avatarUrl" label="Avatar URL">
-        <ElInput v-model="form.avatarUrl" clearable />
+        <ElInput v-model="userForm.avatarUrl" clearable />
       </ElFormItem>
 
       <ElFormItem prop="role" label="Role">
-        <ElTag v-if="form.role === 'ADMIN'" type="warning">{{ form.role }}</ElTag>
-        <ElTag v-else type="primary">{{ form.role }}</ElTag>
+        <ElTag v-if="userForm.role === 'ADMIN'" type="warning">{{ userForm.role }}</ElTag>
+        <ElTag v-else type="primary">{{ userForm.role }}</ElTag>
       </ElFormItem>
 
       <ElFormItem label="Registered At">
-        {{ form.createdAt }} ({{ timeAgo(form.createdAt) }})
+        {{ userForm.createdAt }} ({{ timeAgo(userForm.createdAt) }})
       </ElFormItem>
 
       <ElFormItem label="Updated At">
-        {{ form.updatedAt }} ({{ timeAgo(form.updatedAt) }})
+        {{ userForm.updatedAt }} ({{ timeAgo(userForm.updatedAt) }})
       </ElFormItem>
 
       <ElButton type="primary" native-type="submit" @click="updateUser">Update</ElButton>
@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts" setup>
-useHead({
+useServerHead({
   title: 'Profile'
 })
 
@@ -47,26 +47,12 @@ definePageMeta({
 const { user } = useUserSession()
 const userStore = useUserStore()
 
-const form = ref<SerializedUser>({
-  id: 0,
-  name: '',
-  email: '',
-  avatarUrl: '',
-  role: 'USER',
-  createdAt: '',
-  updatedAt: ''
-})
-
-const { data: userInfo, refresh } = useFetch<SerializedUser>(`/api/user/${user.value?.id}`)
-
-watch(userInfo, newVal => {
-  if (newVal) {
-    form.value = newVal
-  }
+const { data: userForm, refresh } = useFetch<SerializedUser>(() => `/api/user/${user.value?.id}`, {
+  deep: true
 })
 
 async function updateUser() {
-  const { id, name, email, avatarUrl } = form.value!
+  const { id, name, email, avatarUrl } = userForm.value!
 
   const success = await $fetch(`/api/user/${id}`, {
     method: 'PUT',
