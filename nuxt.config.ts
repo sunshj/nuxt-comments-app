@@ -28,6 +28,7 @@ export default defineNuxtConfig({
   ],
 
   piniaPluginPersistedstate: {
-    storage: 'cookies'
+    storage: 'cookies',
+    key: '_%id_store'
   }
 })

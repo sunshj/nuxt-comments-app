@@ -1,12 +1,6 @@
 export const useCommentStore = defineStore(
   'comment',
   () => {
-    const refreshCount = ref(0)
-
-    function refresh() {
-      refreshCount.value++
-    }
-
     const currentReplyId = ref(0)
 
     function setCurrentReplyId(id: number) {
@@ -20,8 +14,6 @@ export const useCommentStore = defineStore(
     }
 
     return {
-      refreshCount,
-      refresh,
       currentReplyId,
       setCurrentReplyId,
       commentInputVisible,

@@ -28,8 +28,6 @@ useHead({
   title: 'Home'
 })
 
-const commentStore = useCommentStore()
-
 const sort = ref<'desc' | 'asc'>('asc')
 
 const queryParams = computed(() => ({
@@ -39,6 +37,7 @@ const queryParams = computed(() => ({
 
 const { data: comments } = useFetch<CommentItem[]>('/api/comment', {
   query: queryParams,
-  watch: [() => commentStore.refreshCount, sort]
+  key: 'api-comments',
+  watch: [sort]
 })
 </script>

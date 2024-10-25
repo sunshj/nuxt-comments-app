@@ -64,7 +64,7 @@ function send() {
     })
 
     form.message = ''
-    commentStore.refresh()
+    refreshNuxtData('api-comments')
     commentStore.setCommentInputVisible(false)
   })
 }
