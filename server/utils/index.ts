@@ -1,45 +1,43 @@
 import { createHash } from 'node:crypto'
 import type { Comment, User } from '@prisma/client'
 
-export type TreeItem<T> = T & { children?: Array<TreeItem<T>> }
+export type TreeItem<T> = T & { children: Array<TreeItem<T>> }
 
-export function buildTree<T extends object, K extends keyof T, P extends keyof T>(
-  array: T[],
-  key: K,
-  parentKey: P
-) {
+interface BuildTreeOptions<T> {
+  key: keyof T
+  parentKey: keyof T
+}
+
+export function buildTree<T extends object>(array: T[], options: BuildTreeOptions<T>) {
+  const { key, parentKey } = options
   const tree: Array<TreeItem<T>> = []
-  const lookup: Record<string, TreeItem<T>> = {}
+  const lookup = new Map<T[keyof T], TreeItem<T>>()
 
-  // Build a lookup table
   for (const item of array) {
-    lookup[item[key] as string] = { ...item, children: [] }
+    lookup.set(item[key], { ...item, children: [] })
   }
 
-  // Build the tree structure
   for (const item of array) {
     if (item[parentKey]) {
-      const parent = lookup[item[parentKey] as string]
+      const parent = lookup.get(item[parentKey])
       if (parent) {
-        parent.children?.push(lookup[item[key] as string])
+        parent.children.push(lookup.get(item[key]) as TreeItem<T>)
       }
     } else {
-      tree.push(lookup[item[key] as string])
+      tree.push(lookup.get(item[key]) as TreeItem<T>)
     }
   }
 
   return tree
 }
 
-export type WithSerializedDates<T> = T extends Date
-  ? string
-  : T extends Array<infer R>
-    ? Array<WithSerializedDates<R>>
-    : T extends object
-      ? { [K in keyof T]: WithSerializedDates<T[K]> }
-      : T
+export type SerializedDate<T, K extends keyof T> = Omit<T, K> & {
+  [P in K]: string
+}
 
-export type CommentItem = WithSerializedDates<TreeItem<Comment & { user: Omit<User, 'createdAt'> }>>
+export type CommentItem = TreeItem<
+  SerializedDate<Comment, 'createdAt'> & { user: Omit<User, 'createdAt' | 'updatedAt'> }
+>
 
 export function getGravatarUrl(email: string) {
   const hash = createHash('sha256').update(email).digest('hex')

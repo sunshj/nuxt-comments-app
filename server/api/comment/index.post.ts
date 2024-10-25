@@ -2,7 +2,7 @@ import { literal, z } from 'zod'
 
 const createCommentSchema = z.object({
   userId: z.number({ required_error: 'userId is required' }).int(),
-  parentId: z.number().int().or(literal(null)),
+  parentId: z.number().int().or(literal(null)).default(null),
   content: z.string({ required_error: 'content is required' }).min(1)
 })
 

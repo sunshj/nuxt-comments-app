@@ -56,7 +56,7 @@ function send() {
       method: 'POST',
       body: {
         userId: userSession.user.value?.id,
-        parentId: props.parentId ?? 0,
+        parentId: props.parentId,
         content: form.message
       }
     }).catch(error => {

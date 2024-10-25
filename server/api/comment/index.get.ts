@@ -49,5 +49,9 @@ export default defineEventHandler(async event => {
     }
   })
   if (!treeify) return comments
-  return buildTree(comments, 'id', 'parentId')
+
+  return buildTree(comments, {
+    key: 'id',
+    parentKey: 'parentId'
+  })
 })

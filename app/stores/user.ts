@@ -1,13 +1,15 @@
 import { defineStore } from 'pinia'
 import type { User } from '@prisma/client'
-import type { WithSerializedDates } from '~~/server/utils'
+import type { SerializedDate } from '~~/server/utils'
+
+export type SerializedUser = SerializedDate<User, 'createdAt' | 'updatedAt'>
 
 export const useUserStore = defineStore(
   'user',
   () => {
-    const user = ref<WithSerializedDates<User>>()
+    const user = ref<SerializedUser>()
 
-    function setUser(newUser: WithSerializedDates<User>) {
+    function setUser(newUser: SerializedUser) {
       user.value = newUser
     }
 

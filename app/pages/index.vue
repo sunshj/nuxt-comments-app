@@ -14,12 +14,8 @@
     </div>
 
     <div v-for="item in comments" :key="item.id" class="flex flex-col">
-      <CommentItem :data="item" />
-      <Comments
-        v-if="item.children?.length && item.children.length > 0"
-        :data="item.children"
-        class="ml-5"
-      />
+      <CommentRender :data="item" />
+      <Comments v-if="item.children.length > 0" :data="item.children" class="ml-5" />
       <ElDivider />
     </div>
   </div>
@@ -41,7 +37,7 @@ const queryParams = computed(() => ({
   sort: sort.value
 }))
 
-const { data: comments } = useFetch<CommentItem[]>('/api/comments', {
+const { data: comments } = useFetch<CommentItem[]>('/api/comment', {
   query: queryParams,
   watch: [() => commentStore.refreshCount, sort]
 })

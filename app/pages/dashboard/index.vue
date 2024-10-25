@@ -124,7 +124,7 @@ const {
   data: comments,
   status,
   refresh
-} = useFetch('/api/comments', {
+} = useFetch('/api/comment', {
   query: queryParams,
   watch: [currentPage, pageSize]
 })

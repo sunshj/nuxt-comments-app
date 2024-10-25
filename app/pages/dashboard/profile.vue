@@ -36,9 +36,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { User } from '@prisma/client'
-import type { WithSerializedDates } from '~~/server/utils'
-
 useHead({
   title: 'Profile'
 })
@@ -50,7 +47,7 @@ definePageMeta({
 const { user } = useUserSession()
 const userStore = useUserStore()
 
-const form = ref<WithSerializedDates<User>>({
+const form = ref<SerializedUser>({
   id: 0,
   name: '',
   email: '',
@@ -60,9 +57,7 @@ const form = ref<WithSerializedDates<User>>({
   updatedAt: ''
 })
 
-const { data: userInfo, refresh } = useFetch<WithSerializedDates<User>>(
-  `/api/user/${user.value?.id}`
-)
+const { data: userInfo, refresh } = useFetch<SerializedUser>(`/api/user/${user.value?.id}`)
 
 watch(userInfo, newVal => {
   if (newVal) {
