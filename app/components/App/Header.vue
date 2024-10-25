@@ -40,8 +40,8 @@ const props = withDefaults(
   }
 )
 
-function logout() {
-  clear()
+async function logout() {
+  await clear()
   navigateTo('/login')
 }
 </script>

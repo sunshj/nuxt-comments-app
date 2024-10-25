@@ -25,7 +25,7 @@
       </div>
     </div>
 
-    <CommentInput v-if="replyInputVisible" ref="inputRef" :parent-id="id" class="my-2" />
+    <CommentInput v-if="replyInputVisible" :parent-id="id" class="my-2" />
 
     <ClientOnly>
       <ElTooltip
@@ -74,8 +74,6 @@ watchEffect(() => {
 const replyInputVisible = computed(
   () => commentStore.commentInputVisible && commentStore.currentReplyId === id.value
 )
-
-const inputRef = ref()
 
 function showReplyInput() {
   if (replyInputVisible.value) {
