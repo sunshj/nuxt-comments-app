@@ -1,32 +1,32 @@
 <template>
   <div class="w-full flex flex-col gap-4 rounded-xl bg-white p-4">
-    <ElRow class="w-full flex" :gutter="20">
-      <ElCol :span="8" :xs="24">
-        <ElFormItem label="筛选">
-          <ElInput v-model="search" clearable placeholder="Search name/email/comment." />
-        </ElFormItem>
-      </ElCol>
-      <ElCol :span="6" :xs="24">
-        <ElFormItem label="排序方式">
-          <ElSelect v-model="sort">
-            <ClientOnly>
-              <ElOption label="最新" value="desc" />
-              <ElOption label="最早" value="asc" />
-            </ClientOnly>
+    <ElForm inline class="w-full">
+      <ElFormItem label="筛选" class="min-w-1/4">
+        <ElInput v-model="search" clearable placeholder="search name, email, comment." />
+      </ElFormItem>
+
+      <ElFormItem label="排序方式">
+        <ClientOnly>
+          <ElSelect v-model="sort" class="w-25">
+            <ElOption label="最新" value="desc" />
+            <ElOption label="最早" value="asc" />
           </ElSelect>
-        </ElFormItem>
-      </ElCol>
-      <ElCol :span="6" :xs="24">
-        <ElButton type="primary" @click="refresh()"> 刷新 </ElButton>
+          <template #fallback> <ElSelect class="w-25" /></template>
+        </ClientOnly>
+      </ElFormItem>
+
+      <ElFormItem>
+        <ElButton native-type="button" type="primary" @click="refresh()"> 刷新 </ElButton>
         <ElButton
           v-if="hasAdminRole && selections.length > 0"
+          native-type="button"
           type="danger"
           @click="confirmDelete(selections)"
         >
           删除所选项
         </ElButton>
-      </ElCol>
-    </ElRow>
+      </ElFormItem>
+    </ElForm>
 
     <ClientOnly>
       <ElTable
