@@ -8,12 +8,12 @@
       </ElCol>
       <ElCol :span="6" :xs="24">
         <ElFormItem label="排序方式">
-          <ElSelect v-model="sort">
-            <ClientOnly>
+          <ClientOnly>
+            <ElSelect v-model="sort">
               <ElOption label="最新" value="desc" />
               <ElOption label="最早" value="asc" />
-            </ClientOnly>
-          </ElSelect>
+            </ElSelect>
+          </ClientOnly>
         </ElFormItem>
       </ElCol>
       <ElCol :span="6" :xs="24">
