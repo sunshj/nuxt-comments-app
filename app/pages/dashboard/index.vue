@@ -130,10 +130,17 @@ const queryParams = computed(() => ({
 const {
   data: comments,
   status,
+  error,
   refresh
 } = useFetch('/api/comment', {
   query: queryParams,
   watch: [currentPage, pageSize]
+})
+
+watch(error, val => {
+  if (val) {
+    ElMessage.error(val.message)
+  }
 })
 
 const pagedComments = computed(() =>

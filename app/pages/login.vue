@@ -4,7 +4,14 @@
       class="z-1 w-100 flex flex-col gap-4 border border-gray-200 rounded-lg border-solid bg-white px-6 py-4 shadow-md"
     >
       <h1 class="text-center text-2xl font-bold">Sign in</h1>
-      <ElForm ref="formRef" class="flex flex-col gap-2" status-icon :model="form" @submit.prevent>
+      <ElForm
+        ref="formRef"
+        class="flex flex-col gap-2"
+        status-icon
+        :model="form"
+        :rules="formRules"
+        @submit.prevent
+      >
         <ElFormItem prop="name" required>
           <ElInput v-model="form.name" clearable placeholder="Your name" />
         </ElFormItem>
@@ -30,13 +37,13 @@
 </template>
 
 <script setup lang="ts">
-import type { FormInstance } from 'element-plus'
+import type { FormInstance, FormRules } from 'element-plus'
 
 definePageMeta({
   layout: false
 })
 
-useHead({
+useServerHead({
   title: 'Sign in',
   script: [
     {
@@ -52,6 +59,28 @@ const form = ref({
   name: '',
   email: ''
 })
+
+const formRules: FormRules<typeof form.value> = {
+  name: [
+    {
+      required: true,
+      message: 'Please input your name',
+      trigger: 'blur'
+    }
+  ],
+  email: [
+    {
+      required: true,
+      message: 'Please input your email',
+      trigger: 'blur'
+    },
+    {
+      type: 'email',
+      message: 'Please input correct email address',
+      trigger: ['blur', 'change']
+    }
+  ]
+}
 
 const formRef = ref<FormInstance | null>(null)
 

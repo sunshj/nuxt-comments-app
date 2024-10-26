@@ -24,11 +24,24 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     'pinia-plugin-persistedstate/nuxt',
     'nuxt-auth-utils',
-    '@vueuse/nuxt'
+    '@vueuse/nuxt',
+    'nuxt-security'
   ],
 
   piniaPluginPersistedstate: {
     storage: 'cookies',
     key: '_%id_store'
+  },
+
+  security: {
+    rateLimiter: {
+      interval: 60 * 1000,
+      tokensPerInterval: 20
+    },
+    headers: {
+      contentSecurityPolicy: {
+        'img-src': false
+      }
+    }
   }
 })

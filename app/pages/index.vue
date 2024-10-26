@@ -35,9 +35,15 @@ const queryParams = computed(() => ({
   sort: sort.value
 }))
 
-const { data: comments } = useFetch<CommentItem[]>('/api/comment', {
+const { data: comments, error } = useFetch<CommentItem[]>('/api/comment', {
   query: queryParams,
   key: 'api-comments',
   watch: [sort]
+})
+
+watch(error, val => {
+  if (val) {
+    ElMessage.error(val.message)
+  }
 })
 </script>

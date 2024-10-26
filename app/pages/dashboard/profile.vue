@@ -47,8 +47,18 @@ definePageMeta({
 const { user } = useUserSession()
 const userStore = useUserStore()
 
-const { data: userForm, refresh } = useFetch<SerializedUser>(() => `/api/user/${user.value?.id}`, {
+const {
+  data: userForm,
+  error,
+  refresh
+} = useFetch<SerializedUser>(() => `/api/user/${user.value?.id}`, {
   deep: true
+})
+
+watch(error, val => {
+  if (val) {
+    ElMessage.error(val.message)
+  }
 })
 
 async function updateUser() {

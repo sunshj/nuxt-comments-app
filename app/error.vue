@@ -3,7 +3,7 @@
     <h2 class="text-3xl">Something went wrong!</h2>
     <div class="text-base text-red-600">{{ error?.statusCode }} {{ error?.message }}</div>
 
-    <ElButton type="primary" @click="clearError({ redirect: '/' })">Back </ElButton>
+    <ElButton type="primary" @click="clearError()">Try again</ElButton>
   </div>
 </template>
 
