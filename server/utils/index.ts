@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto'
 import type { Comment, User } from '@prisma/client'
 
-export type TreeItem<T> = T & { children: Array<TreeItem<T>> }
+export type TreeNode<T> = T & { children: Array<TreeNode<T>> }
 
 interface BuildTreeOptions<T> {
   key: keyof T
@@ -10,8 +10,8 @@ interface BuildTreeOptions<T> {
 
 export function buildTree<T extends object>(array: T[], options: BuildTreeOptions<T>) {
   const { key, parentKey } = options
-  const tree: Array<TreeItem<T>> = []
-  const lookup = new Map<T[keyof T], TreeItem<T>>()
+  const tree: Array<TreeNode<T>> = []
+  const lookup = new Map<T[keyof T], TreeNode<T>>()
 
   for (const item of array) {
     lookup.set(item[key], { ...item, children: [] })
@@ -21,25 +21,38 @@ export function buildTree<T extends object>(array: T[], options: BuildTreeOption
     if (item[parentKey]) {
       const parent = lookup.get(item[parentKey])
       if (parent) {
-        parent.children.push(lookup.get(item[key]) as TreeItem<T>)
+        parent.children.push(lookup.get(item[key]) as TreeNode<T>)
       }
     } else {
-      tree.push(lookup.get(item[key]) as TreeItem<T>)
+      tree.push(lookup.get(item[key]) as TreeNode<T>)
     }
   }
 
   return tree
 }
 
-export function countTreeItems<T>(tree: T[], key: keyof T): number {
-  return tree.reduce((count, item) => count + 1 + countTreeItems(item[key] as T[], key), 0)
+export function countTreeNodes<T>(nodes: Array<TreeNode<T>>): number {
+  let count = 0
+
+  const traverse = (node: TreeNode<T>) => {
+    count++
+    for (const child of node.children) {
+      traverse(child)
+    }
+  }
+
+  for (const node of nodes) {
+    traverse(node)
+  }
+
+  return count
 }
 
 export type Serialized<T, K extends keyof T> = Omit<T, K> & {
   [P in K]: string
 }
 
-export type CommentItem = TreeItem<
+export type CommentItem = TreeNode<
   Serialized<Comment, 'createdAt'> & {
     user: Pick<User, 'name' | 'avatarUrl'>
     reply?: Pick<User, 'name'>

@@ -25,20 +25,17 @@ export default defineEventHandler(async event => {
     }
   })
 
-  const total = comments.length
   const commentsTree = buildTree(comments, {
     key: 'id',
     parentKey: 'parentId'
   }).sort((a, b) => {
-    return type === 'hot'
-      ? countTreeItems(b.children, 'children') - countTreeItems(a.children, 'children')
-      : type === 'oldest'
-        ? a.createdAt.getTime() - b.createdAt.getTime()
-        : b.createdAt.getTime() - a.createdAt.getTime()
+    if (type === 'hot') return countTreeNodes(b.children) - countTreeNodes(a.children)
+    if (type === 'oldest') return a.createdAt.getTime() - b.createdAt.getTime()
+    return b.createdAt.getTime() - a.createdAt.getTime()
   })
 
   return {
-    total,
+    total: countTreeNodes(commentsTree),
     comments: commentsTree
   }
 })
