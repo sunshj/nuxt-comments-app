@@ -5,7 +5,7 @@
     <div class="flex items-center gap-4">
       <ClientOnly>
         <ElDropdown>
-          <ElAvatar :src="userStore.user!.avatarUrl!" class="cursor-pointer">
+          <ElAvatar :src="userStore.user?.avatarUrl!" class="cursor-pointer">
             {{ userStore.user?.name }}
           </ElAvatar>
 
@@ -17,19 +17,13 @@
               >
                 个人中心
               </ElDropdownItem>
-              <ElDropdownItem @click="logout">退出</ElDropdownItem>
+              <ElDropdownItem @click="userStore.logout()">退出</ElDropdownItem>
             </ElDropdownMenu>
           </template>
         </ElDropdown>
 
         <template #fallback>
-          <ElSkeleton animated class="flex-center">
-            <template #template>
-              <ElAvatar :src="userStore.user!.avatarUrl!" class="cursor-pointer">
-                {{ userStore.user?.name }}
-              </ElAvatar>
-            </template>
-          </ElSkeleton>
+          <ElAvatar />
         </template>
       </ClientOnly>
     </div>
@@ -37,7 +31,6 @@
 </template>
 
 <script lang="ts" setup>
-const { clear } = useUserSession()
 const userStore = useUserStore()
 
 const props = withDefaults(
@@ -49,9 +42,4 @@ const props = withDefaults(
     showProfile: true
   }
 )
-
-async function logout() {
-  await clear()
-  navigateTo('/login')
-}
 </script>

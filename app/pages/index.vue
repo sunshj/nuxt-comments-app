@@ -12,7 +12,7 @@
           <ElOption label="按热度" value="hot" />
         </ElSelect>
         <template #fallback>
-          <ElSelect disabled style="width: 150px" />
+          <ElSelect style="width: 150px" />
         </template>
       </ClientOnly>
     </div>
@@ -45,7 +45,7 @@ const { data, error } = useFetch<{ comments: CommentItem[]; total: number }>('/a
 
 watch(error, val => {
   if (val) {
-    ElMessage.error(val.message)
+    ElMessage.error(`${val?.statusCode} ${val?.statusMessage}`)
   }
 })
 </script>

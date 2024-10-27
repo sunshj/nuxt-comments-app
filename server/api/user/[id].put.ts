@@ -19,7 +19,7 @@ export default defineEventHandler(async event => {
     data
   })
 
-  await setUserSession(event, {
+  await replaceUserSession(event, {
     user: {
       id: user.id,
       role: user.role

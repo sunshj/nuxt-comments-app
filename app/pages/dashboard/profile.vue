@@ -2,7 +2,13 @@
   <div class="flex flex-col gap-4">
     <ElPageHeader @back="navigateTo('/dashboard')">
       <template #content>
-        <span class="mr-3 text-xl font-600"> {{ userStore.user?.name }}'s profile </span>
+        <span class="mr-3 text-xl font-600">
+          <ClientOnly>
+            {{ userStore.user?.name }}
+            <template #fallback> {{ userForm?.name }}</template>
+          </ClientOnly>
+          's profile
+        </span>
       </template>
     </ElPageHeader>
 
@@ -13,7 +19,7 @@
       <ElFormItem prop="email" label="Email">
         <ElInput v-model="userForm.email" clearable />
       </ElFormItem>
-      <ElFormItem prop="avatarUrl" label="Avatar URL">
+      <ElFormItem prop="avatarUrl" label="Avatar">
         <ElInput v-model="userForm.avatarUrl" clearable />
       </ElFormItem>
 
@@ -23,11 +29,15 @@
       </ElFormItem>
 
       <ElFormItem label="Registered At">
-        {{ userForm.createdAt }} ({{ timeAgo(userForm.createdAt) }})
+        <ElTag size="large" type="info">
+          {{ formatTime(userForm.createdAt) }}
+        </ElTag>
       </ElFormItem>
 
       <ElFormItem label="Updated At">
-        {{ userForm.updatedAt }} ({{ timeAgo(userForm.updatedAt) }})
+        <ElTag size="large" type="info">
+          {{ formatTime(userForm.updatedAt) }}
+        </ElTag>
       </ElFormItem>
 
       <ElButton type="primary" native-type="submit" @click="updateUser">Update</ElButton>
@@ -57,20 +67,18 @@ const {
 
 watch(error, val => {
   if (val) {
-    ElMessage.error(val.message)
+    ElMessage.error(`${val?.statusCode} ${val?.statusMessage}`)
   }
 })
 
 async function updateUser() {
   const { id, name, email, avatarUrl } = userForm.value!
 
-  const success = await $fetch(`/api/user/${id}`, {
-    method: 'PUT',
-    body: { name, email, avatarUrl }
-  }).catch(error => {
+  const success = await userStore.updateUser(id, { name, email, avatarUrl }).catch(error => {
     ElMessage.error(error.message)
     return null
   })
+
   if (success) {
     ElMessage.success('User updated successfully')
     refresh()

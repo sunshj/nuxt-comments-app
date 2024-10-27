@@ -86,7 +86,7 @@ const formRef = ref<FormInstance | null>(null)
 
 const isSubmitting = ref(false)
 
-function submit() {
+const submit = useDebounceFn(() => {
   if (!formRef.value) return
   formRef.value.validate(async valid => {
     if (!valid) return
@@ -94,7 +94,7 @@ function submit() {
     const success = await userStore
       .login(form.value)
       .catch(error => {
-        ElMessage.error(error.message)
+        ElMessage.error(`${error?.statusCode} ${error?.statusMessage}`)
         return null
       })
       .finally(() => {
@@ -106,5 +106,5 @@ function submit() {
       await navigateTo('/')
     }
   })
-}
+}, 300)
 </script>

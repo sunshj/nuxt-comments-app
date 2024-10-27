@@ -16,7 +16,7 @@
       </ElFormItem>
 
       <ElFormItem>
-        <ElButton native-type="button" type="primary" @click="refresh()"> 刷新 </ElButton>
+        <ElButton native-type="button" type="primary" @click="debouncedRefresh()"> 刷新 </ElButton>
         <ElButton
           v-if="hasAdminRole && selections.length > 0"
           native-type="button"
@@ -96,7 +96,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { CommentItem } from '~~/server/utils'
 import type { TableInstance } from 'element-plus'
 
 useServerHead({
@@ -133,9 +132,11 @@ const { data, status, error, refresh } = useFetch('/api/comment/list', {
   watch: [currentPage, pageSize]
 })
 
+const debouncedRefresh = useDebounceFn(refresh, 300)
+
 watch(error, val => {
   if (val) {
-    ElMessage.error(val.message)
+    ElMessage.error(`${val?.statusCode} ${val?.statusMessage}`)
   }
 })
 

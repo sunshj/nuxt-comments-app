@@ -17,6 +17,12 @@ export default defineNuxtConfig({
     typedPages: true
   },
 
+  runtimeConfig: {
+    session: {
+      maxAge: 60 * 60 * 24 * 7 // 1 week
+    }
+  },
+
   modules: [
     '@unocss/nuxt',
     '@element-plus/nuxt',
@@ -29,26 +35,19 @@ export default defineNuxtConfig({
   ],
 
   piniaPluginPersistedstate: {
-    storage: 'cookies',
-    key: '_%id_store'
+    storage: 'localStorage',
+    key: 'comments-%id'
   },
 
   security: {
     rateLimiter: {
       interval: 60 * 1000,
-      tokensPerInterval: 20
+      tokensPerInterval: 30
     },
     headers: {
       contentSecurityPolicy: {
         'img-src': false,
-        'script-src': [
-          "'self'",
-          'https:',
-          "'unsafe-inline'",
-          "'strict-dynamic'",
-          "'nonce-{{nonce}}'",
-          "'unsafe-eval'"
-        ]
+        'script-src': false
       }
     }
   }

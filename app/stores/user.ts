@@ -8,6 +8,7 @@ export const useUserStore = defineStore(
   'user',
   () => {
     const user = ref<SerializedUser>()
+    const { clear } = useUserSession()
 
     function setUser(newUser: SerializedUser) {
       user.value = newUser
@@ -23,9 +24,27 @@ export const useUserStore = defineStore(
       return user
     }
 
+    async function logout() {
+      await clear()
+      navigateTo('/login')
+    }
+
+    async function updateUser(id: number, data: Partial<SerializedUser>) {
+      const user = await $fetch(`/api/user/${id}`, {
+        method: 'PUT',
+        body: data
+      })
+
+      setUser(user)
+      return user
+    }
+
     return {
       user,
-      login
+      setUser,
+      updateUser,
+      login,
+      logout
     }
   },
   {

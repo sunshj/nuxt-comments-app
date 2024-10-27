@@ -52,7 +52,7 @@ const formRules: FormRules = {
 
 const isSubmitting = ref(false)
 
-function send() {
+const send = useDebounceFn(() => {
   if (!formRef.value) return
   formRef.value.validate(async valid => {
     if (!valid) return
@@ -77,7 +77,7 @@ function send() {
     refreshNuxtData('api-comments')
     commentStore.setReplyInputVisible(false)
   })
-}
+}, 300)
 </script>
 
 <style>

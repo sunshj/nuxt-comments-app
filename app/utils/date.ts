@@ -1,4 +1,4 @@
-import { formatTimeAgo } from '@vueuse/core'
+import { formatDate, formatTimeAgo } from '@vueuse/core'
 
 export function timeAgo(datetime: string) {
   return formatTimeAgo(new Date(datetime), {
@@ -16,4 +16,8 @@ export function timeAgo(datetime: string) {
       invalid: '无效日期'
     }
   })
+}
+
+export function formatTime(datetime: string) {
+  return formatDate(new Date(datetime), 'YYYY-MM-DD HH:mm:ss')
 }
