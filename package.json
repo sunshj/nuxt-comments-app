@@ -6,7 +6,6 @@
     "dev": "nuxt dev",
     "studio": "prisma studio",
     "db:generate": "prisma generate",
-    "db:migrate": "prisma migrate dev",
     "db:push": "prisma db push",
     "build": "nuxt build",
     "start": "pm2 start ecosystem.config.cjs",

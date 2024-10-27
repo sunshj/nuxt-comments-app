@@ -31,12 +31,19 @@ export function buildTree<T extends object>(array: T[], options: BuildTreeOption
   return tree
 }
 
-export type SerializedDate<T, K extends keyof T> = Omit<T, K> & {
+export function countTreeItems<T>(tree: T[], key: keyof T): number {
+  return tree.reduce((count, item) => count + 1 + countTreeItems(item[key] as T[], key), 0)
+}
+
+export type Serialized<T, K extends keyof T> = Omit<T, K> & {
   [P in K]: string
 }
 
 export type CommentItem = TreeItem<
-  SerializedDate<Comment, 'createdAt'> & { user: Omit<User, 'createdAt' | 'updatedAt'> }
+  Serialized<Comment, 'createdAt'> & {
+    user: Pick<User, 'name' | 'avatarUrl'>
+    reply?: Pick<User, 'name'>
+  }
 >
 
 export function getGravatarUrl(email: string) {

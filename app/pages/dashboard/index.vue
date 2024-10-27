@@ -7,9 +7,9 @@
 
       <ElFormItem label="排序方式">
         <ClientOnly>
-          <ElSelect v-model="sort" class="w-25">
-            <ElOption label="最新" value="desc" />
-            <ElOption label="最早" value="asc" />
+          <ElSelect v-model="type" class="w-25">
+            <ElOption label="最新" value="recent" />
+            <ElOption label="最早" value="oldest" />
           </ElSelect>
           <template #fallback> <ElSelect class="w-25" /></template>
         </ClientOnly>
@@ -34,7 +34,7 @@
         v-loading="status === 'pending'"
         stripe
         border
-        :data="pagedComments"
+        :data="data?.comments"
         style="width: 100%"
         row-key="id"
         @selection-change="handleSelectionChange"
@@ -44,12 +44,12 @@
         <ElTableColumn prop="user.name" label="name" width="120" />
         <ElTableColumn prop="user.email" label="email" width="180" />
         <ElTableColumn prop="user.role" label="role" width="100">
-          <template #default="{ row }: { row: CommentItem }">
+          <template #default="{ row }">
             <ElTag v-if="row.user.role === 'ADMIN'" type="warning">{{ row.user.role }}</ElTag>
             <ElTag v-else type="primary">{{ row.user.role }}</ElTag>
           </template>
         </ElTableColumn>
-        <ElTableColumn prop="parentId" label="parentId" width="100" />
+        <ElTableColumn prop="reply.name" label="replyTo" width="100" />
         <ElTableColumn prop="content" label="comment" />
         <ElTableColumn label="createdAt" width="120">
           <template #default="{ row }">
@@ -57,8 +57,8 @@
           </template>
         </ElTableColumn>
 
-        <ElTableColumn label="Operations" min-width="120">
-          <template #default="{ row }: { row: CommentItem }">
+        <ElTableColumn label="Operations" width="200">
+          <template #default="{ row }">
             <ElButton type="default" size="small" @click="previewComment(row.id)">
               Preview
             </ElButton>
@@ -85,7 +85,7 @@
         class="w-full flex-center overflow-x-auto"
         background
         :page-sizes="[10, 20, 50, 100]"
-        :total="total"
+        :total="data?.total ?? 0"
         layout="total, sizes, prev, pager, next, jumper"
       />
       <template #fallback>
@@ -115,24 +115,20 @@ const tableRef = ref<TableInstance>()
 
 const currentPage = ref(1)
 const pageSize = ref(10)
-const total = computed(() => comments.value?.length ?? 0)
 const selections = ref<number[]>([])
 
 const search = ref('')
 const debouncedSearch = refDebounced(search, 300)
-const sort = ref<'desc' | 'asc'>('asc')
+const type = ref<'recent' | 'oldest'>('recent')
 
 const queryParams = computed(() => ({
-  search: debouncedSearch.value,
-  sort: sort.value
+  type: type.value,
+  page: currentPage.value,
+  size: pageSize.value,
+  search: debouncedSearch.value
 }))
 
-const {
-  data: comments,
-  status,
-  error,
-  refresh
-} = useFetch('/api/comment', {
+const { data, status, error, refresh } = useFetch('/api/comment/list', {
   query: queryParams,
   watch: [currentPage, pageSize]
 })
@@ -142,13 +138,6 @@ watch(error, val => {
     ElMessage.error(val.message)
   }
 })
-
-const pagedComments = computed(() =>
-  comments.value?.slice(
-    (currentPage.value - 1) * pageSize.value,
-    currentPage.value * pageSize.value
-  )
-)
 
 function handleSelectionChange(selection: any[]) {
   selections.value = selection.map(item => item.id)

@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
 import type { User } from '@prisma/client'
-import type { SerializedDate } from '~~/server/utils'
+import type { Serialized } from '~~/server/utils'
 
-export type SerializedUser = SerializedDate<User, 'createdAt' | 'updatedAt'>
+export type SerializedUser = Serialized<User, 'createdAt' | 'updatedAt'>
 
 export const useUserStore = defineStore(
   'user',

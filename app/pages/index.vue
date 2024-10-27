@@ -1,19 +1,23 @@
 <template>
   <div class="m-a max-w-3xl flex flex-col p-2">
-    <CommentInput />
+    <CommentReply v-if="!commentStore.replyInputVisible" />
 
-    <div class="flex items-center justify-end gap-2 py-2">
-      <div>排序方式：</div>
+    <div class="flex items-center justify-between gap-2 py-2">
+      <div class="text-xl font-bold">{{ data?.total }} 评论</div>
 
-      <ElSelect v-model="sort" style="width: 150px">
-        <ClientOnly>
-          <ElOption label="最新" value="desc" />
-          <ElOption label="最早" value="asc" />
-        </ClientOnly>
-      </ElSelect>
+      <ClientOnly>
+        <ElSelect v-model="type" style="width: 150px">
+          <ElOption label="按正序" value="recent" />
+          <ElOption label="按倒序" value="oldest" />
+          <ElOption label="按热度" value="hot" />
+        </ElSelect>
+        <template #fallback>
+          <ElSelect disabled style="width: 150px" />
+        </template>
+      </ClientOnly>
     </div>
 
-    <div v-for="item in comments" :key="item.id" class="flex flex-col">
+    <div v-for="item in data?.comments" :key="item.id" class="flex flex-col">
       <CommentRender :data="item" />
       <Comments v-if="item.children.length > 0" :data="item.children" class="ml-5" />
       <ElDivider />
@@ -28,17 +32,15 @@ useServerHead({
   title: 'Home'
 })
 
-const sort = ref<'desc' | 'asc'>('asc')
+const commentStore = useCommentStore()
 
-const queryParams = computed(() => ({
-  treeify: true,
-  sort: sort.value
-}))
+const type = ref<'recent' | 'oldest' | 'hot'>('recent')
 
-const { data: comments, error } = useFetch<CommentItem[]>('/api/comment', {
+const queryParams = computed(() => ({ type: type.value }))
+
+const { data, error } = useFetch<{ comments: CommentItem[]; total: number }>('/api/comment', {
   query: queryParams,
-  key: 'api-comments',
-  watch: [sort]
+  key: 'api-comments'
 })
 
 watch(error, val => {

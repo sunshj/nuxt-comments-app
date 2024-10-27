@@ -10,14 +10,16 @@
       <ElInput
         v-model="form.message"
         type="textarea"
-        :rows="2"
+        :autosize="{ minRows: 2, maxRows: 6 }"
+        :maxlength="140"
+        show-word-limit
         placeholder="请输入内容，Ctrl + Enter 发送"
         @keydown.ctrl.enter="send()"
       />
     </ElFormItem>
 
     <div class="w-full flex justify-end">
-      <ElButton type="primary" @click="send()">评论</ElButton>
+      <ElButton :loading="isSubmitting" type="primary" @click="send()">评论</ElButton>
     </div>
   </ElForm>
 </template>
@@ -48,24 +50,38 @@ const formRules: FormRules = {
   ]
 }
 
+const isSubmitting = ref(false)
+
 function send() {
   if (!formRef.value) return
   formRef.value.validate(async valid => {
     if (!valid) return
+    isSubmitting.value = true
     await $fetch('/api/comment', {
       method: 'POST',
       body: {
         userId: userSession.user.value?.id,
         parentId: props.parentId,
+        replyToId: commentStore.currentReply?.userId,
         content: form.message
       }
-    }).catch(error => {
-      ElMessage.error(error.message)
     })
+      .catch(error => {
+        ElMessage.error(error.message)
+      })
+      .finally(() => {
+        isSubmitting.value = false
+      })
 
     form.message = ''
     refreshNuxtData('api-comments')
-    commentStore.setCommentInputVisible(false)
+    commentStore.setReplyInputVisible(false)
   })
 }
 </script>
+
+<style>
+.el-textarea__inner {
+  resize: none;
+}
+</style>

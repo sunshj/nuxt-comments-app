@@ -1,20 +1,22 @@
-export const useCommentStore = defineStore('comment', () => {
-  const currentReplyId = ref(0)
+import type { CommentItem } from '~~/server/utils'
 
-  function setCurrentReplyId(id: number) {
-    currentReplyId.value = id
+export const useCommentStore = defineStore('comment', () => {
+  const currentReply = ref<CommentItem>()
+
+  function setCurrentReply(reply?: CommentItem) {
+    currentReply.value = reply
   }
 
-  const commentInputVisible = ref(false)
+  const replyInputVisible = ref(false)
 
-  function setCommentInputVisible(visible: boolean) {
-    commentInputVisible.value = visible
+  function setReplyInputVisible(visible: boolean) {
+    replyInputVisible.value = visible
   }
 
   return {
-    currentReplyId,
-    setCurrentReplyId,
-    commentInputVisible,
-    setCommentInputVisible
+    currentReply,
+    setCurrentReply,
+    replyInputVisible,
+    setReplyInputVisible
   }
 })

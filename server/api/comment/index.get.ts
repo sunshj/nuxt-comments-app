@@ -1,57 +1,44 @@
 import { z } from 'zod'
 
 const schema = z.object({
-  treeify: z.coerce.boolean().optional().default(false),
-  sort: z.enum(['asc', 'desc']).optional().default('asc'),
-  search: z.string().optional()
+  type: z.enum(['hot', 'recent', 'oldest']).optional().default('recent')
 })
 
 export default defineEventHandler(async event => {
   await requireUserSession(event)
 
-  const { treeify, sort, search } = await getValidatedQuery(event, schema.parse)
+  const { type } = await getValidatedQuery(event, schema.parse)
+
   const comments = await prisma.comment.findMany({
     include: {
       user: {
         select: {
-          id: true,
           name: true,
-          email: true,
-          role: true
+          avatarUrl: true
+        }
+      },
+      reply: {
+        select: {
+          name: true
         }
       }
-    },
-    where: {
-      OR: [
-        {
-          content: {
-            contains: search
-          }
-        },
-        {
-          user: {
-            name: {
-              contains: search
-            }
-          }
-        },
-        {
-          user: {
-            email: {
-              contains: search
-            }
-          }
-        }
-      ]
-    },
-    orderBy: {
-      createdAt: sort
     }
   })
-  if (!treeify) return comments
 
-  return buildTree(comments, {
+  const total = comments.length
+  const commentsTree = buildTree(comments, {
     key: 'id',
     parentKey: 'parentId'
+  }).sort((a, b) => {
+    return type === 'hot'
+      ? countTreeItems(b.children, 'children') - countTreeItems(a.children, 'children')
+      : type === 'oldest'
+        ? a.createdAt.getTime() - b.createdAt.getTime()
+        : b.createdAt.getTime() - a.createdAt.getTime()
   })
+
+  return {
+    total,
+    comments: commentsTree
+  }
 })
