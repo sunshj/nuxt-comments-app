@@ -43,9 +43,9 @@ const { data, error } = useFetch<{ comments: CommentItem[]; total: number }>('/a
   key: 'api-comments'
 })
 
-watch(error, val => {
-  if (val) {
-    ElMessage.error(`${val?.statusCode} ${val?.statusMessage}`)
+watch(error, err => {
+  if (err) {
+    ElMessage.error(`${err?.data?.statusCode} ${err?.data?.statusMessage}`)
   }
 })
 </script>

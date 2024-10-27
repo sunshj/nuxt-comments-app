@@ -65,9 +65,9 @@ const {
   deep: true
 })
 
-watch(error, val => {
-  if (val) {
-    ElMessage.error(`${val?.statusCode} ${val?.statusMessage}`)
+watch(error, err => {
+  if (err) {
+    ElMessage.error(`${err?.data?.statusCode} ${err?.data?.statusMessage}`)
   }
 })
 

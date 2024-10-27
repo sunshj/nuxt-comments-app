@@ -134,9 +134,9 @@ const { data, status, error, refresh } = useFetch('/api/comment/list', {
 
 const debouncedRefresh = useDebounceFn(refresh, 300)
 
-watch(error, val => {
-  if (val) {
-    ElMessage.error(`${val?.statusCode} ${val?.statusMessage}`)
+watch(error, err => {
+  if (err) {
+    ElMessage.error(`${err?.data?.statusCode} ${err?.data?.statusMessage}`)
   }
 })
 

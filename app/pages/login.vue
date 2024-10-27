@@ -94,7 +94,7 @@ const submit = useDebounceFn(() => {
     const success = await userStore
       .login(form.value)
       .catch(error => {
-        ElMessage.error(`${error?.statusCode} ${error?.statusMessage}`)
+        ElMessage.error(`${error?.data?.statusCode} ${error?.data?.statusMessage}`)
         return null
       })
       .finally(() => {

@@ -57,7 +57,8 @@ const send = useDebounceFn(() => {
   formRef.value.validate(async valid => {
     if (!valid) return
     isSubmitting.value = true
-    await $fetch('/api/comment', {
+
+    const success = await $fetch('/api/comment', {
       method: 'POST',
       body: {
         userId: userSession.user.value?.id,
@@ -67,15 +68,18 @@ const send = useDebounceFn(() => {
       }
     })
       .catch(error => {
-        ElMessage.error(error.message)
+        ElMessage.error(`${error?.data?.statusCode} ${error?.data?.statusMessage}`)
+        return null
       })
       .finally(() => {
         isSubmitting.value = false
       })
 
-    form.message = ''
-    refreshNuxtData('api-comments')
-    commentStore.setReplyInputVisible(false)
+    if (success) {
+      form.message = ''
+      refreshNuxtData('api-comments')
+      commentStore.setReplyInputVisible(false)
+    }
   })
 }, 300)
 </script>
