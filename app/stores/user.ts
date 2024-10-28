@@ -10,7 +10,7 @@ export const useUserStore = defineStore(
     const user = ref<SerializedUser>()
     const { clear } = useUserSession()
 
-    function setUser(newUser: SerializedUser) {
+    function setUser(newUser?: SerializedUser) {
       user.value = newUser
     }
 
@@ -18,6 +18,9 @@ export const useUserStore = defineStore(
       const user = await $fetch('/api/auth/login', {
         method: 'POST',
         body: data
+      }).catch(error => {
+        toastFetchError(error)
+        return undefined
       })
 
       setUser(user)
@@ -33,6 +36,9 @@ export const useUserStore = defineStore(
       const user = await $fetch(`/api/user/${id}`, {
         method: 'PUT',
         body: data
+      }).catch(error => {
+        toastFetchError(error)
+        return undefined
       })
 
       setUser(user)

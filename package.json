@@ -48,6 +48,11 @@
     "unocss": "^0.63.6",
     "unplugin-vue-router": "^0.10.8"
   },
+  "pnpm": {
+    "patchedDependencies": {
+      "nuxt-security@2.0.0": "patches/nuxt-security@2.0.0.patch"
+    }
+  },
   "lint-staged": {
     "*.{vue,js,ts}": [
       "eslint --fix",

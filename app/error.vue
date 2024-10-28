@@ -1,7 +1,13 @@
 <template>
   <div class="h-full flex-center flex-col gap-3 pb-20">
     <h2 class="text-3xl">Something went wrong!</h2>
-    <div class="text-base text-red-600">{{ error?.statusCode }} {{ error?.message }}</div>
+    <div class="text-base text-red-600">
+      {{ statusCode }} {{ statusMessage || message || error }}
+    </div>
+
+    <div v-if="statusCode === 429" class="text-base text-red-600">
+      Reset Time: {{ formatTime(data.resetTime) }}
+    </div>
 
     <ElButton type="primary" @click="clearError()">Try again</ElButton>
   </div>
@@ -10,7 +16,14 @@
 <script lang="ts" setup>
 import type { NuxtError } from '#app'
 
-defineProps({
-  error: Object as () => NuxtError
+useServerHead({
+  title: 'Error'
+})
+
+const { error } = defineProps<{ error: NuxtError<any> }>()
+
+const { statusCode, statusMessage, message, data } = toRefs({
+  ...error,
+  data: typeof error.data === 'string' ? JSON.parse(error.data) : error.data
 })
 </script>

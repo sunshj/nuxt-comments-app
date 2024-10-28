@@ -77,7 +77,7 @@ const formRules: FormRules<typeof form.value> = {
     {
       type: 'email',
       message: 'Please input correct email address',
-      trigger: ['blur', 'change']
+      trigger: ['blur']
     }
   ]
 }
@@ -91,15 +91,9 @@ const submit = useDebounceFn(() => {
   formRef.value.validate(async valid => {
     if (!valid) return
     isSubmitting.value = true
-    const success = await userStore
-      .login(form.value)
-      .catch(error => {
-        ElMessage.error(`${error?.data?.statusCode} ${error?.data?.statusMessage}`)
-        return null
-      })
-      .finally(() => {
-        isSubmitting.value = false
-      })
+    const success = await userStore.login(form.value).finally(() => {
+      isSubmitting.value = false
+    })
 
     if (success) {
       ElMessage.success('Login successfully')

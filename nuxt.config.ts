@@ -5,7 +5,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      titleTemplate: '%s | Nuxt Comments App'
+      titleTemplate: '%s | Nuxt Comments'
     }
   },
 
@@ -42,6 +42,7 @@ export default defineNuxtConfig({
   security: {
     rateLimiter: {
       interval: 60 * 1000,
+      headers: true,
       tokensPerInterval: 30
     },
     headers: {

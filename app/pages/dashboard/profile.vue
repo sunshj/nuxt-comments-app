@@ -65,19 +65,16 @@ const {
   deep: true
 })
 
-watch(error, err => {
-  if (err) {
-    ElMessage.error(`${err?.data?.statusCode} ${err?.data?.statusMessage}`)
+watchEffect(() => {
+  if (error.value) {
+    toastFetchError(error.value)
   }
 })
 
 async function updateUser() {
   const { id, name, email, avatarUrl } = userForm.value!
 
-  const success = await userStore.updateUser(id, { name, email, avatarUrl }).catch(error => {
-    ElMessage.error(error.message)
-    return null
-  })
+  const success = await userStore.updateUser(id, { name, email, avatarUrl })
 
   if (success) {
     ElMessage.success('User updated successfully')

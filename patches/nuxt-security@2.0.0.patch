@@ -1,0 +1,16 @@
+diff --git a/dist/runtime/server/middleware/rateLimiter.js b/dist/runtime/server/middleware/rateLimiter.js
+index 062c74add09d46f3d010f1d737b28b9a6b5a1bc4..91d7cd1656b349061600204e3e1a84b70c1148fb 100644
+--- a/dist/runtime/server/middleware/rateLimiter.js
++++ b/dist/runtime/server/middleware/rateLimiter.js
+@@ -34,7 +34,10 @@ export default defineEventHandler(async (event) => {
+       if (isLimited) {
+         const tooManyRequestsError = {
+           statusCode: 429,
+-          statusMessage: "Too Many Requests"
++          statusMessage: 'Too Many Requests',
++          data: {
++            resetTime: timeForInterval,
++          },
+         };
+         if (rules.rateLimiter.headers) {
+           setResponseHeader(event, "x-ratelimit-remaining", 0);

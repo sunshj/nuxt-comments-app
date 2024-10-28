@@ -1,6 +1,6 @@
 import { formatDate, formatTimeAgo } from '@vueuse/core'
 
-export function timeAgo(datetime: string) {
+export function timeAgo(datetime: string | number) {
   return formatTimeAgo(new Date(datetime), {
     messages: {
       justNow: '刚刚',
@@ -18,6 +18,6 @@ export function timeAgo(datetime: string) {
   })
 }
 
-export function formatTime(datetime: string) {
+export function formatTime(datetime: string | number) {
   return formatDate(new Date(datetime), 'YYYY-MM-DD HH:mm:ss')
 }

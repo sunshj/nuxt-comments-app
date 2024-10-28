@@ -5,8 +5,10 @@
     <div class="flex items-center justify-between gap-2 py-2">
       <div class="text-xl font-bold">{{ data?.total }} 评论</div>
 
+      <div v-if="status === 'pending'">评论加载中...</div>
+
       <ClientOnly>
-        <ElSelect v-model="type" style="width: 150px">
+        <ElSelect v-model="type" style="width: 100px">
           <ElOption label="按正序" value="recent" />
           <ElOption label="按倒序" value="oldest" />
           <ElOption label="按热度" value="hot" />
@@ -17,10 +19,20 @@
       </ClientOnly>
     </div>
 
-    <div v-for="item in data?.comments" :key="item.id" class="flex flex-col">
-      <CommentRender :data="item" />
-      <Comments v-if="item.children.length > 0" :data="item.children" class="ml-5" />
-      <ElDivider />
+    <div v-if="error">
+      <ElEmpty description="加载失败">
+        <ElButton type="primary" @click="refresh()"> Try again </ElButton>
+      </ElEmpty>
+    </div>
+
+    <ElEmpty v-else-if="!data?.comments.length" description="暂无评论" />
+
+    <div v-else>
+      <div v-for="item in data.comments" :key="item.id" class="flex flex-col">
+        <CommentRender :data="item" />
+        <Comments v-if="item.children.length > 0" :data="item.children" class="ml-5" />
+        <ElDivider />
+      </div>
     </div>
   </div>
 </template>
@@ -38,14 +50,21 @@ const type = ref<'recent' | 'oldest' | 'hot'>('recent')
 
 const queryParams = computed(() => ({ type: type.value }))
 
-const { data, error } = useFetch<{ comments: CommentItem[]; total: number }>('/api/comment', {
-  query: queryParams,
-  key: 'api-comments'
-})
+const { data, error, status, refresh } = useFetch<{ comments: CommentItem[]; total: number }>(
+  '/api/comment',
+  {
+    query: queryParams,
+    key: 'api-comments'
+  }
+)
 
-watch(error, err => {
-  if (err) {
-    ElMessage.error(`${err?.data?.statusCode} ${err?.data?.statusMessage}`)
+if (error.value) {
+  showError(error.value)
+}
+
+watchEffect(() => {
+  if (error.value) {
+    toastFetchError(error.value)
   }
 })
 </script>

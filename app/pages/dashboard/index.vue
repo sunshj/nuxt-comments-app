@@ -107,7 +107,7 @@ definePageMeta({
 })
 
 const { user } = useUserSession()
-
+const commentStore = useCommentStore()
 const hasAdminRole = computed(() => user.value?.role === 'ADMIN')
 
 const tableRef = ref<TableInstance>()
@@ -134,9 +134,9 @@ const { data, status, error, refresh } = useFetch('/api/comment/list', {
 
 const debouncedRefresh = useDebounceFn(refresh, 300)
 
-watch(error, err => {
-  if (err) {
-    ElMessage.error(`${err?.data?.statusCode} ${err?.data?.statusMessage}`)
+watchEffect(() => {
+  if (error.value) {
+    toastFetchError(error.value)
   }
 })
 
@@ -155,12 +155,12 @@ function confirmDelete(ids: number[]) {
     type: 'warning'
   })
     .then(async () => {
-      await $fetch('/api/comment', {
-        method: 'DELETE',
-        body: { ids }
-      })
-      tableRef.value?.clearSelection()
-      refresh()
+      const success = await commentStore.deleteComments(ids)
+
+      if (success) {
+        tableRef.value?.clearSelection()
+        refresh()
+      }
     })
     .catch(() => {
       ElMessage.info('Delete canceled')

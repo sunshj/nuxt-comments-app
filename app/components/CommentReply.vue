@@ -68,7 +68,7 @@ const send = useDebounceFn(() => {
       }
     })
       .catch(error => {
-        ElMessage.error(`${error?.data?.statusCode} ${error?.data?.statusMessage}`)
+        ElMessage.error(error?.data?.statusMessage)
         return null
       })
       .finally(() => {
