@@ -37,8 +37,8 @@ model Comment {
   parentId  Int?
   content   String
   createdAt DateTime  @default(now())
-  parent    Comment?  @relation("parentComment", fields: [parentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  children  Comment[] @relation("parentComment")
+  parent    Comment?  @relation("childrenComments", fields: [parentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  children  Comment[] @relation("childrenComments")
   user      User      @relation("user", fields: [userId], references: [id])
 
   @@map("comments")
