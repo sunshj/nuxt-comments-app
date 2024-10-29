@@ -53,3 +53,12 @@ export default defineNuxtConfig({
     }
   }
 })
+
+declare module '#app' {
+  interface PageMeta {
+    menuConfig?: {
+      title: string
+      order?: number
+    }
+  }
+}

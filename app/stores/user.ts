@@ -45,10 +45,20 @@ export const useUserStore = defineStore(
       return user
     }
 
+    async function deleteUser(id: number) {
+      return await $fetch(`/api/user/${id}`, {
+        method: 'DELETE'
+      }).catch(error => {
+        toastFetchError(error)
+        return undefined
+      })
+    }
+
     return {
       user,
       setUser,
       updateUser,
+      deleteUser,
       login,
       logout
     }

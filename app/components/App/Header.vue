@@ -1,5 +1,8 @@
 <template>
-  <ElHeader v-bind="$attrs" class="h-16 flex items-center justify-between bg-zinc-800 text-white">
+  <ElHeader
+    v-bind="$attrs"
+    class="z-10 h-16 flex items-center justify-between bg-zinc-800 text-white"
+  >
     <div>{{ props.title }}</div>
 
     <div class="flex items-center gap-4">

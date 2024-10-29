@@ -14,7 +14,7 @@
           <ElOption label="按热度" value="hot" />
         </ElSelect>
         <template #fallback>
-          <ElSelect style="width: 150px" />
+          <ElSelect style="width: 100px" />
         </template>
       </ClientOnly>
     </div>

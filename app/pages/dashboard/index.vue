@@ -12,7 +12,6 @@
             <ElOption label="仅评论" value="comment" />
             <ElOption label="仅回复" value="replies" />
           </ElSelect>
-          <template #fallback> <ElSelect class="w-25" /></template>
         </ClientOnly>
       </ElFormItem>
 
@@ -22,7 +21,6 @@
             <ElOption label="最新" value="recent" />
             <ElOption label="最早" value="oldest" />
           </ElSelect>
-          <template #fallback> <ElSelect class="w-25" /></template>
         </ClientOnly>
       </ElFormItem>
 
@@ -121,7 +119,11 @@ useServerHead({
 })
 
 definePageMeta({
-  layout: 'dashboard'
+  layout: 'dashboard',
+  menuConfig: {
+    title: 'Comments',
+    order: 0
+  }
 })
 
 const { user } = useUserSession()
@@ -148,8 +150,7 @@ const queryParams = computed(() => ({
 }))
 
 const { data, status, error, refresh } = useFetch('/api/comment/list', {
-  query: queryParams,
-  watch: [currentPage, pageSize]
+  query: queryParams
 })
 
 const debouncedRefresh = useDebounceFn(refresh, 300)
