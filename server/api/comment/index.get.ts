@@ -17,21 +17,25 @@ export default defineEventHandler(async event => {
           avatarUrl: true
         }
       },
-      reply: {
+      parent: {
         select: {
-          name: true
+          user: {
+            select: {
+              name: true
+            }
+          }
         }
       }
     }
   })
 
-  const commentsTree = buildTree(comments, {
+  const commentsTree = buildShallowTree(comments, {
     key: 'id',
     parentKey: 'parentId'
   }).sort((a, b) => {
-    if (type === 'hot') return countTreeNodes(b.children) - countTreeNodes(a.children)
-    if (type === 'oldest') return a.createdAt.getTime() - b.createdAt.getTime()
-    return b.createdAt.getTime() - a.createdAt.getTime()
+    if (type === 'hot') return b.children.length - a.children.length
+    if (type === 'oldest') return a.id - b.id
+    return b.id - a.id
   })
 
   return {

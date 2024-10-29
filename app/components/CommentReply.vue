@@ -63,7 +63,6 @@ const send = useDebounceFn(() => {
       body: {
         userId: userSession.user.value?.id,
         parentId: props.parentId,
-        replyToId: commentStore.currentReply?.userId,
         content: form.message
       }
     })

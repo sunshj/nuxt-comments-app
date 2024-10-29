@@ -1,7 +1,10 @@
 <template>
-  <div v-for="item in props.data" :key="item.id" v-bind="$attrs" class="flex flex-col gap-2">
-    <CommentRender :data="item" />
-    <Comments v-if="item.children.length > 0" :data="item.children" />
+  <div v-for="item in withActiveData" v-bind="$attrs" :key="item.id" class="flex flex-col gap-2">
+    <CommentRender v-model:active="item.active" :data="item" />
+    <div v-show="item.active">
+      <Comments v-if="item.children.length > 0" :data="item.children" class="ml-5" />
+    </div>
+    <ElDivider v-if="!item.parentId" />
   </div>
 </template>
 
@@ -11,4 +14,10 @@ import type { CommentItem } from '~~/server/utils'
 const props = defineProps<{
   data: CommentItem[]
 }>()
+
+const withActiveData = ref<Array<CommentItem & { active: boolean }>>([])
+
+watchEffect(() => {
+  withActiveData.value = props.data.map(v => ({ ...v, active: true }))
+})
 </script>

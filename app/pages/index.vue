@@ -27,13 +27,7 @@
 
     <ElEmpty v-else-if="!data?.comments.length" description="暂无评论" />
 
-    <div v-else>
-      <div v-for="item in data.comments" :key="item.id" class="flex flex-col">
-        <CommentRender :data="item" />
-        <Comments v-if="item.children.length > 0" :data="item.children" class="ml-5" />
-        <ElDivider />
-      </div>
-    </div>
+    <Comments v-else :data="data.comments" />
   </div>
 </template>
 
@@ -57,10 +51,6 @@ const { data, error, status, refresh } = useFetch<{ comments: CommentItem[]; tot
     key: 'api-comments'
   }
 )
-
-if (error.value) {
-  showError(error.value)
-}
 
 watchEffect(() => {
   if (error.value) {

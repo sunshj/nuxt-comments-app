@@ -5,9 +5,20 @@
         <ElInput v-model="search" clearable placeholder="search name, email, comment." />
       </ElFormItem>
 
-      <ElFormItem label="排序方式">
+      <ElFormItem label="分类">
         <ClientOnly>
           <ElSelect v-model="type" class="w-25">
+            <ElOption label="全部" value="all" />
+            <ElOption label="仅评论" value="comment" />
+            <ElOption label="仅回复" value="replies" />
+          </ElSelect>
+          <template #fallback> <ElSelect class="w-25" /></template>
+        </ClientOnly>
+      </ElFormItem>
+
+      <ElFormItem label="排序方式">
+        <ClientOnly>
+          <ElSelect v-model="sort" class="w-25">
             <ElOption label="最新" value="recent" />
             <ElOption label="最早" value="oldest" />
           </ElSelect>
@@ -41,15 +52,22 @@
       >
         <ElTableColumn v-if="hasAdminRole" type="selection" reserve-selection width="55" />
         <ElTableColumn prop="id" label="ID" width="80" />
+        <ElTableColumn label="type" width="80">
+          <template #default="{ row }">
+            <ElTag v-if="!row.parentId" type="primary">评论</ElTag>
+            <ElTag v-else type="info">回复</ElTag>
+          </template>
+        </ElTableColumn>
         <ElTableColumn prop="user.name" label="name" width="120" />
         <ElTableColumn prop="user.email" label="email" width="180" />
         <ElTableColumn prop="user.role" label="role" width="100">
           <template #default="{ row }">
             <ElTag v-if="row.user.role === 'ADMIN'" type="warning">{{ row.user.role }}</ElTag>
-            <ElTag v-else type="primary">{{ row.user.role }}</ElTag>
+            <ElTag v-else type="info">{{ row.user.role }}</ElTag>
           </template>
         </ElTableColumn>
-        <ElTableColumn prop="reply.name" label="replyTo" width="100" />
+        <ElTableColumn prop="parentId" label="parentId" width="100" />
+        <ElTableColumn prop="parent.user.name" label="replyTo" width="100" />
         <ElTableColumn prop="content" label="comment" />
         <ElTableColumn label="createdAt" width="120">
           <template #default="{ row }">
@@ -118,9 +136,11 @@ const selections = ref<number[]>([])
 
 const search = ref('')
 const debouncedSearch = refDebounced(search, 300)
-const type = ref<'recent' | 'oldest'>('recent')
+const type = ref<'all' | 'comment' | 'replies'>('all')
+const sort = ref<'recent' | 'oldest'>('recent')
 
 const queryParams = computed(() => ({
+  sort: sort.value,
   type: type.value,
   page: currentPage.value,
   size: pageSize.value,
@@ -149,11 +169,15 @@ function previewComment(id: number) {
 }
 
 function confirmDelete(ids: number[]) {
-  ElMessageBox.confirm(`Are you sure you want to delete ${ids.length} comments?`, 'Warning', {
-    confirmButtonText: 'OK',
-    cancelButtonText: 'Cancel',
-    type: 'warning'
-  })
+  ElMessageBox.confirm(
+    'This will permanently delete the comment and its replies. Continue?',
+    'Warning',
+    {
+      confirmButtonText: 'OK',
+      cancelButtonText: 'Cancel',
+      type: 'warning'
+    }
+  )
     .then(async () => {
       const success = await commentStore.deleteComments(ids)
 

@@ -1,6 +1,8 @@
 <template>
   <div class="flex items-start gap-2 rounded-md p-2">
-    <div :id="`comment-${id}`" class="pt-1"><ElAvatar :src="user.avatarUrl!" /></div>
+    <div :id="`comment-${id}`" class="pt-1">
+      <ElAvatar :src="user.avatarUrl!" />
+    </div>
     <div class="flex flex-1 flex-col gap-2">
       <div class="flex justify-between">
         <div class="flex gap-2 text-sm">
@@ -14,6 +16,14 @@
         </div>
 
         <div class="flex text-sm">
+          <ElButton
+            v-if="!commentStore.replyInputVisible && !parentId && children.length > 0"
+            size="small"
+            @click="active = !active"
+          >
+            {{ active ? '收起' : `(${children.length})展开` }}
+          </ElButton>
+
           <ElButton size="small" type="primary" @click="showReplyInput">
             {{ currentReplyInputVisible ? '收起' : '回复' }}
           </ElButton>
@@ -21,7 +31,7 @@
       </div>
 
       <div class="text-black">
-        <span v-if="parentId" class="text-blue"> 回复 {{ reply?.name }}：</span>
+        <span v-if="parentId" class="text-blue"> 回复 {{ parent?.user.name }}：</span>
         {{ content }}
       </div>
       <CommentReply v-if="currentReplyInputVisible" :parent-id="id" class="my-2" />
@@ -51,7 +61,9 @@ const props = defineProps<{
   data: CommentItem
 }>()
 
-const { id, user, content, parentId, reply, createdAt } = toRefs(reactive(props.data))
+const active = defineModel('active')
+
+const { id, user, content, parentId, parent, createdAt, children } = toRefs(reactive(props.data))
 
 const previewMode = computed(() => route.hash === `#comment-${id.value}`)
 

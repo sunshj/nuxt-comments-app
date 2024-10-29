@@ -1,7 +1,9 @@
 import { z } from 'zod'
+import type { Prisma } from '@prisma/client'
 
 const schema = z.object({
-  type: z.enum(['recent', 'oldest']).optional().default('recent'),
+  sort: z.enum(['recent', 'oldest']).optional().default('recent'),
+  type: z.enum(['all', 'comment', 'replies']).optional().default('all'),
   page: z.coerce.number().optional().default(1),
   size: z.coerce.number().optional().default(10),
   search: z.string().optional()
@@ -10,9 +12,9 @@ const schema = z.object({
 export default defineEventHandler(async event => {
   await requireUserSession(event)
 
-  const { type, page, size, search } = await getValidatedQuery(event, schema.parse)
+  const { sort, type, page, size, search } = await getValidatedQuery(event, schema.parse)
 
-  const comments = await prisma.comment.findMany({
+  const findManyQuery: Prisma.CommentFindManyArgs = {
     include: {
       user: {
         select: {
@@ -21,13 +23,23 @@ export default defineEventHandler(async event => {
           role: true
         }
       },
-      reply: {
+      parent: {
         select: {
-          name: true
+          user: {
+            select: {
+              name: true
+            }
+          }
         }
       }
     },
     where: {
+      ...(type === 'comment'
+        ? { parentId: null }
+        : type === 'replies'
+          ? { parentId: { not: null } }
+          : {}),
+
       OR: [
         {
           content: {
@@ -55,35 +67,14 @@ export default defineEventHandler(async event => {
     skip: (page - 1) * size,
 
     orderBy: {
-      createdAt: type === 'oldest' ? 'asc' : 'desc'
+      createdAt: sort === 'oldest' ? 'asc' : 'desc'
     }
-  })
+  }
 
-  const total = await prisma.comment.count({
-    where: {
-      OR: [
-        {
-          content: {
-            contains: search
-          }
-        },
-        {
-          user: {
-            name: {
-              contains: search
-            }
-          }
-        },
-        {
-          user: {
-            email: {
-              contains: search
-            }
-          }
-        }
-      ]
-    }
-  })
+  const [comments, total] = await prisma.$transaction([
+    prisma.comment.findMany(findManyQuery),
+    prisma.comment.count({ where: findManyQuery.where })
+  ])
 
   return {
     comments,
