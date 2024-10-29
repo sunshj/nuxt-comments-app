@@ -9,7 +9,7 @@ export type Serialized<T, K extends keyof T> = Omit<T, K> & {
   [P in K]: string
 }
 
-export type CommentItem = TreeNode<
+export type CommentItem = ShallowTreeNode<
   Serialized<Comment, 'createdAt'> & {
     user: Pick<User, 'name' | 'avatarUrl'>
     parent?: { user: Pick<User, 'name'> }

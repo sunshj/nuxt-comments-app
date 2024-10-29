@@ -1,4 +1,6 @@
-export type TreeNode<T> = T & { children: Array<TreeNode<T>> }
+export type TreeNode<T, C = any> = T & { children: C[] }
+export type ShallowTreeNode<T> = TreeNode<T, T>
+export type DeepTreeNode<T> = T & { children: Array<DeepTreeNode<T>> }
 
 interface BuildTreeOptions<T> {
   key: keyof T
@@ -8,8 +10,8 @@ interface BuildTreeOptions<T> {
 /** @deprecated */
 export function buildTree<T extends object>(array: T[], options: BuildTreeOptions<T>) {
   const { key, parentKey } = options
-  const tree: Array<TreeNode<T>> = []
-  const lookup = new Map<T[keyof T], TreeNode<T>>()
+  const tree: Array<DeepTreeNode<T>> = []
+  const lookup = new Map<T[keyof T], DeepTreeNode<T>>()
 
   for (const item of array) {
     lookup.set(item[key], { ...item, children: [] })
@@ -19,41 +21,40 @@ export function buildTree<T extends object>(array: T[], options: BuildTreeOption
     if (item[parentKey]) {
       const parent = lookup.get(item[parentKey])
       if (parent) {
-        parent.children.push(lookup.get(item[key]) as TreeNode<T>)
+        parent.children.push(lookup.get(item[key]) as DeepTreeNode<T>)
       }
     } else {
-      tree.push(lookup.get(item[key]) as TreeNode<T>)
+      tree.push(lookup.get(item[key]) as DeepTreeNode<T>)
     }
   }
 
   return tree
 }
 
-export function buildShallowTree<T extends object>(
-  array: T[],
-  { key, parentKey }: BuildTreeOptions<T>
-): Array<TreeNode<T>> {
-  const lookup: Record<keyof T, TreeNode<T>> = Object.fromEntries(
-    array.map(node => [node[key], { ...node, children: [] }])
-  )
+export function buildShallowTree<T extends object>(array: T[], options: BuildTreeOptions<T>) {
+  const { key, parentKey } = options
 
-  function* ancestry(id: keyof T): Generator<PropertyKey> {
-    if (id) {
+  const lookup = new Map<keyof T, ShallowTreeNode<T>>()
+
+  for (const item of array) {
+    lookup.set(item[key] as keyof T, { ...item, children: [] })
+  }
+
+  function* ancestry(id: keyof T): Generator<keyof T> {
+    if (id && lookup.has(id)) {
       yield id
-      if (lookup[id]) {
-        yield* ancestry(lookup[id][parentKey] as keyof T)
-      }
+      yield* ancestry(lookup.get(id)![parentKey] as keyof T)
     }
   }
+
   array.forEach(node => {
-    const ancestors = [...ancestry(node[parentKey] as keyof T)]
-    const ancestor = ancestors.length > 0 ? (ancestors.at(-1) as keyof T) : null
-    if (ancestor && lookup[ancestor]) {
-      lookup[ancestor].children.push(lookup[node[key] as keyof T])
+    const [ancestor] = [...ancestry(node[parentKey] as keyof T)].reverse()
+    if (ancestor && lookup.has(ancestor)) {
+      lookup.get(ancestor)!.children.push(lookup.get(node[key] as keyof T)!)
     }
   })
 
-  return Object.values<TreeNode<T>>(lookup).filter(node => node[parentKey] === null)
+  return Array.from(lookup.values()).filter(node => node[parentKey] === null)
 }
 
 export function countTreeNodes<T>(nodes: Array<TreeNode<T>>): number {
@@ -71,9 +72,4 @@ export function countTreeNodes<T>(nodes: Array<TreeNode<T>>): number {
   }
 
   return count
-}
-
-export function sortTree<T>(nodes: Array<TreeNode<T>>) {
-  // TODO: Need implement
-  return nodes
 }
