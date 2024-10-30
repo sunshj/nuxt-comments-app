@@ -3,7 +3,12 @@ import { PrismaClient, type Comment, type Role, type User } from '@prisma/client
 import type { H3Event } from 'h3'
 
 export const prisma = new PrismaClient({
-  log: ['query', 'info', 'warn', 'error']
+  log: ['query', 'info', 'warn', 'error'],
+  omit: {
+    user: {
+      password: true
+    }
+  }
 })
 
 export type Serialized<T, K extends keyof T> = Omit<T, K> & {

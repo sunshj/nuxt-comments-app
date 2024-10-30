@@ -2,7 +2,8 @@ import { defineStore } from 'pinia'
 import type { User } from '@prisma/client'
 import type { Serialized } from '~~/server/utils'
 
-export type SerializedUser = Serialized<User, 'createdAt' | 'updatedAt'>
+export type SerializedUser = Serialized<Omit<User, 'password'>, 'createdAt' | 'updatedAt'>
+export type AuthenticateAction = 'Sign in' | 'Sign up'
 
 export const useUserStore = defineStore(
   'user',
@@ -14,7 +15,7 @@ export const useUserStore = defineStore(
       user.value = newUser
     }
 
-    async function login(data: { name: string; email: string }) {
+    async function login(data: { name: string; password: string }) {
       const user = await $fetch('/api/auth/login', {
         method: 'POST',
         body: data
@@ -25,6 +26,16 @@ export const useUserStore = defineStore(
 
       setUser(user)
       return user
+    }
+
+    async function register(data: { name: string; email: string; password: string }) {
+      return await $fetch('/api/auth/register', {
+        method: 'POST',
+        body: data
+      }).catch(error => {
+        toastFetchError(error)
+        return undefined
+      })
     }
 
     async function logout() {
@@ -60,6 +71,7 @@ export const useUserStore = defineStore(
       updateUser,
       deleteUser,
       login,
+      register,
       logout
     }
   },

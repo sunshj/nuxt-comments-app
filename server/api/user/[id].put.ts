@@ -11,12 +11,12 @@ export default defineEventHandler(async event => {
   const id = getRouterParam(event, 'id')
   const { error, data } = await readValidatedBody(event, updateUserSchema.safeParse)
   if (error) throw createBadRequestError(error)
-  console.log(data)
 
   const user = await prisma.user.update({
     where: {
       id: Number(id)
     },
+
     data
   })
 

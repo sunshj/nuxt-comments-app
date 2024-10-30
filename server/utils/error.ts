@@ -15,3 +15,11 @@ export function createForbiddenError(message: string) {
     statusMessage: message
   })
 }
+
+export function createUnauthorizedError(message: string) {
+  return createError({
+    statusCode: 401,
+    message: 'Unauthorized',
+    statusMessage: message
+  })
+}

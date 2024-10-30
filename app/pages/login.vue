@@ -3,7 +3,8 @@
     <div
       class="z-1 w-100 flex flex-col gap-4 border border-gray-200 rounded-lg border-solid bg-white px-6 py-4 shadow-md"
     >
-      <h1 class="text-center text-2xl font-bold">Sign in</h1>
+      <h1 class="text-center text-2xl font-bold">{{ action }}</h1>
+      <ElSegmented v-model="action" :options="actionOptions" />
       <ElForm
         ref="formRef"
         class="flex flex-col gap-2"
@@ -16,8 +17,18 @@
           <ElInput v-model="form.name" clearable placeholder="Your name" />
         </ElFormItem>
 
-        <ElFormItem prop="email" required>
+        <ElFormItem v-if="action === 'Sign up'" prop="email" required>
           <ElInput v-model="form.email" type="email" clearable placeholder="Your email" />
+        </ElFormItem>
+
+        <ElFormItem prop="password" required>
+          <ElInput
+            v-model="form.password"
+            type="password"
+            clearable
+            show-password
+            placeholder="Your password"
+          />
         </ElFormItem>
 
         <ElButton
@@ -27,7 +38,7 @@
           native-type="submit"
           @click="submit"
         >
-          login
+          {{ action }}
         </ElButton>
       </ElForm>
     </div>
@@ -54,30 +65,30 @@ useServerHead({
 })
 
 const userStore = useUserStore()
+const userSession = useUserSession()
+
+const action = ref<AuthenticateAction>('Sign in')
+const actionOptions: AuthenticateAction[] = ['Sign in', 'Sign up']
 
 const form = ref({
   name: '',
-  email: ''
+  email: '',
+  password: ''
 })
 
 const formRules: FormRules<typeof form.value> = {
-  name: [
-    {
-      required: true,
-      message: 'Please input your name',
-      trigger: 'blur'
-    }
-  ],
   email: [
-    {
-      required: true,
-      message: 'Please input your email',
-      trigger: 'blur'
-    },
     {
       type: 'email',
       message: 'Please input correct email address',
-      trigger: ['blur']
+      trigger: 'blur'
+    }
+  ],
+  password: [
+    {
+      min: 6,
+      message: 'Password length should be at least 6',
+      trigger: 'blur'
     }
   ]
 }
@@ -91,13 +102,29 @@ const submit = useDebounceFn(() => {
   formRef.value.validate(async valid => {
     if (!valid) return
     isSubmitting.value = true
-    const success = await userStore.login(form.value).finally(() => {
-      isSubmitting.value = false
-    })
+    const { name, email, password } = form.value
 
-    if (success) {
-      ElMessage.success('Login successfully')
-      await navigateTo('/')
+    if (action.value === 'Sign up') {
+      const registerSuccess = await userStore.register({ name, email, password }).finally(() => {
+        isSubmitting.value = false
+      })
+
+      if (registerSuccess) {
+        ElMessage.success('Register successfully')
+        action.value = 'Sign in'
+      }
+    }
+
+    if (action.value === 'Sign in') {
+      const loginSuccess = await userStore.login({ name, password }).finally(() => {
+        isSubmitting.value = false
+      })
+
+      if (loginSuccess) {
+        ElMessage.success('Login successfully')
+        await userSession.fetch()
+        navigateTo('/')
+      }
     }
   })
 }, 300)
