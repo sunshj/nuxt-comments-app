@@ -14,10 +14,12 @@
 <script lang="ts" setup>
 const router = useRouter()
 const routes = router.getRoutes()
+const { user } = useUserSession()
 
-const menus = computed(() =>
-  routes
-    .filter(r => !!r.meta.menuConfig)
+const menus = computed(() => {
+  if (!user.value) return []
+  return routes
+    .filter(r => !!r.meta.menuConfig && r.meta.roles?.includes(user.value!.role))
     .sort((a, b) => (a.meta.menuConfig?.order || 0) - (b.meta.menuConfig?.order || 0))
     .map(({ meta, path, name }) => {
       return {
@@ -26,7 +28,7 @@ const menus = computed(() =>
         path
       }
     })
-)
+})
 </script>
 
 <style scoped>

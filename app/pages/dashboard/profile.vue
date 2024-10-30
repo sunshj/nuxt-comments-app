@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-4">
-    <ElPageHeader @back="navigateTo('/dashboard')">
+    <ElPageHeader @back="$router.back()">
       <template #content>
         <span class="mr-3 text-xl font-600">
           <ClientOnly>

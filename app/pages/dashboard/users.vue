@@ -80,6 +80,7 @@ useServerHead({
 
 definePageMeta({
   layout: 'dashboard',
+  roles: ['ADMIN'],
   menuConfig: {
     title: 'Users',
     order: 1

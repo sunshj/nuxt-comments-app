@@ -5,7 +5,7 @@ const schema = z.object({
   type: z.enum(['all', 'comment', 'replies']).optional().default('all'),
   page: z.coerce.number().optional().default(1),
   size: z.coerce.number().optional().default(10),
-  search: z.string().optional()
+  search: z.string().optional().default('')
 })
 
 export default defineEventHandler(async event => {

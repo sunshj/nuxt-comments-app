@@ -9,7 +9,7 @@
       Reset Time: {{ formatTime(data.resetTime) }}
     </div>
 
-    <ElButton type="primary" @click="clearError()">Try again</ElButton>
+    <ElButton type="primary" @click="$router.back()">Back</ElButton>
   </div>
 </template>
 
@@ -22,8 +22,10 @@ useServerHead({
 
 const { error } = defineProps<{ error: NuxtError<any> }>()
 
-const { statusCode, statusMessage, message, data } = toRefs({
-  ...error,
-  data: typeof error.data === 'string' ? JSON.parse(error.data) : error.data
-})
+const { statusCode, statusMessage, message, data } = toRefs(
+  reactive({
+    ...error,
+    data: typeof error.data === 'string' ? JSON.parse(error.data) : error.data
+  })
+)
 </script>

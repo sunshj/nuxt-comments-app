@@ -120,6 +120,7 @@ useServerHead({
 
 definePageMeta({
   layout: 'dashboard',
+  roles: ['ADMIN', 'USER'],
   menuConfig: {
     title: 'Comments',
     order: 0

@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto'
-import { PrismaClient, type Comment, type User } from '@prisma/client'
+import { PrismaClient, type Comment, type Role, type User } from '@prisma/client'
+import type { H3Event } from 'h3'
 
 export const prisma = new PrismaClient({
   log: ['query', 'info', 'warn', 'error']
@@ -19,4 +20,11 @@ export type CommentItem = ShallowTreeNode<
 export function getGravatarUrl(email: string) {
   const hash = createHash('sha256').update(email).digest('hex')
   return `https://www.gravatar.com/avatar/${hash}?s=40&d=identicon`
+}
+
+export async function requireRoles(event: H3Event, roles: Role[]) {
+  const { user } = await requireUserSession(event)
+  if (!roles.includes(user.role)) {
+    throw createForbiddenError('You do not have permission to perform this action')
+  }
 }

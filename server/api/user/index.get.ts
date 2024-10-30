@@ -3,11 +3,11 @@ import { z } from 'zod'
 const schema = z.object({
   page: z.coerce.number().optional().default(1),
   size: z.coerce.number().optional().default(10),
-  search: z.string().optional()
+  search: z.string().optional().default('')
 })
 
 export default defineEventHandler(async event => {
-  await requireUserSession(event)
+  await requireRoles(event, ['ADMIN'])
 
   const { page, size, search } = await getValidatedQuery(event, schema.parse)
 

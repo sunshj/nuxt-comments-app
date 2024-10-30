@@ -1,8 +1,8 @@
 import { z } from 'zod'
 
 const updateUserSchema = z.object({
-  name: z.string({ required_error: 'Name is required' }).min(1),
-  email: z.string({ required_error: 'Email is required' }).email(),
+  name: z.string().min(1).optional(),
+  email: z.string().email().optional(),
   avatarUrl: z.string().url().optional()
 })
 
@@ -11,6 +11,7 @@ export default defineEventHandler(async event => {
   const id = getRouterParam(event, 'id')
   const { error, data } = await readValidatedBody(event, updateUserSchema.safeParse)
   if (error) throw createBadRequestError(error)
+  console.log(data)
 
   const user = await prisma.user.update({
     where: {

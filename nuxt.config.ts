@@ -1,3 +1,5 @@
+import { execSync } from 'node:child_process'
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
@@ -20,6 +22,10 @@ export default defineNuxtConfig({
   runtimeConfig: {
     session: {
       maxAge: 60 * 60 * 24 * 7 // 1 week
+    },
+    public: {
+      buildTime: Date.now(),
+      gitSha: execSync('git rev-parse HEAD').toString().trim()
     }
   },
 
@@ -53,12 +59,3 @@ export default defineNuxtConfig({
     }
   }
 })
-
-declare module '#app' {
-  interface PageMeta {
-    menuConfig?: {
-      title: string
-      order?: number
-    }
-  }
-}

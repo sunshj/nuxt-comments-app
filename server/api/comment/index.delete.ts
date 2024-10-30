@@ -5,8 +5,7 @@ const schema = z.object({
 })
 
 export default defineEventHandler(async event => {
-  const { user } = await requireUserSession(event)
-  if (user.role !== 'ADMIN') throw createForbiddenError('You are not authorized to delete comments')
+  await requireRoles(event, ['ADMIN'])
 
   const { ids } = await readValidatedBody(event, schema.parse)
   return prisma.comment.deleteMany({
