@@ -119,11 +119,15 @@ function showEditDialog(id: number) {
 }
 
 function confirmDelete(id: number) {
-  ElMessageBox.confirm('This will permanently delete the user. Continue?', 'Warning', {
-    confirmButtonText: 'OK',
-    cancelButtonText: 'Cancel',
-    type: 'warning'
-  })
+  ElMessageBox.confirm(
+    'This will permanently delete the user and its comments. Continue?',
+    'Warning',
+    {
+      confirmButtonText: 'OK',
+      cancelButtonText: 'Cancel',
+      type: 'warning'
+    }
+  )
     .then(async () => {
       const success = await userStore.deleteUser(id)
 

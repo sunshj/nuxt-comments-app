@@ -13,6 +13,16 @@ export const useCommentStore = defineStore('comment', () => {
     replyInputVisible.value = visible
   }
 
+  async function send(data: { userId: number; parentId?: number; content: string }) {
+    return await $fetch('/api/comment', {
+      method: 'POST',
+      body: data
+    }).catch(error => {
+      toastFetchError(error)
+      return undefined
+    })
+  }
+
   async function deleteComments(ids: number[]) {
     return await $fetch('/api/comment', {
       method: 'DELETE',
@@ -29,6 +39,7 @@ export const useCommentStore = defineStore('comment', () => {
     replyInputVisible,
     setReplyInputVisible,
 
+    send,
     deleteComments
   }
 })

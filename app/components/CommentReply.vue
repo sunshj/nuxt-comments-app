@@ -58,17 +58,11 @@ const send = useDebounceFn(() => {
     if (!valid) return
     isSubmitting.value = true
 
-    const success = await $fetch('/api/comment', {
-      method: 'POST',
-      body: {
-        userId: userSession.user.value?.id,
+    const success = await commentStore
+      .send({
+        userId: userSession.user.value!.id,
         parentId: props.parentId,
         content: form.message
-      }
-    })
-      .catch(error => {
-        ElMessage.error(error?.data?.statusMessage)
-        return null
       })
       .finally(() => {
         isSubmitting.value = false
