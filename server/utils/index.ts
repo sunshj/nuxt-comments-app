@@ -32,4 +32,5 @@ export async function requireRoles(event: H3Event, roles: Role[]) {
   if (!roles.includes(user.role)) {
     throw createForbiddenError('You do not have permission to perform this action')
   }
+  return user
 }
