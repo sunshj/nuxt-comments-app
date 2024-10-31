@@ -54,7 +54,7 @@ definePageMeta({
   layout: 'dashboard'
 })
 
-const { user } = useUserSession()
+const { user, fetch } = useUserSession()
 const userStore = useUserStore()
 
 const {
@@ -78,6 +78,7 @@ async function updateUser() {
 
   if (success) {
     ElMessage.success('User updated successfully')
+    await fetch()
     refresh()
   }
 }

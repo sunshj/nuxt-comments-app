@@ -1,7 +1,9 @@
 export default defineEventHandler(async event => {
-  await requireRoles(event, ['ADMIN'])
+  const user = await requireRoles(event, ['ADMIN'])
 
   const id = getRouterParam(event, 'id')
+  if (user.id === Number(id)) throw createForbiddenError('You cannot delete yourself')
+
   return prisma.user.delete({
     where: {
       id: Number(id)

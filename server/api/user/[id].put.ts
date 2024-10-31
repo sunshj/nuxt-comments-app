@@ -12,13 +12,24 @@ export default defineEventHandler(async event => {
   const { error, data } = await readValidatedBody(event, updateUserSchema.safeParse)
   if (error) throw createBadRequestError(error)
 
-  const user = await prisma.user.update({
-    where: {
-      id: Number(id)
-    },
+  const user = await prisma.user
+    .update({
+      where: {
+        id: Number(id)
+      },
 
-    data
-  })
+      data
+    })
+    .catch(error => {
+      if (error.code === 'P2002') {
+        throw createError({
+          statusCode: 500,
+          statusMessage: 'name/email already exists'
+        })
+      }
+
+      throw error
+    })
 
   await replaceUserSession(event, {
     user: {
