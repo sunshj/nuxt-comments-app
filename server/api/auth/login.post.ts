@@ -1,19 +1,19 @@
 import { objectOmit } from '@vueuse/core'
 import { z } from 'zod'
 
-const createUserSchema = z.object({
-  name: z.string({ required_error: 'Name is required' }).min(1),
+const schema = z.object({
+  email: z.string({ required_error: 'email is required' }).email(),
   password: z.string({ required_error: 'Password is required' }).min(6)
 })
 
 export default defineEventHandler(async event => {
-  const { error, data } = await readValidatedBody(event, createUserSchema.safeParse)
+  const { error, data } = await readValidatedBody(event, schema.safeParse)
 
   if (error) throw createBadRequestError(error)
-  const { name, password } = data
+  const { email, password } = data
 
   const user = await prisma.user.findUnique({
-    where: { name },
+    where: { email },
     omit: {
       password: false
     }

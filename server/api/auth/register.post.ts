@@ -1,13 +1,13 @@
 import { z } from 'zod'
 
-const createUserSchema = z.object({
+const schema = z.object({
   name: z.string({ required_error: 'Name is required' }).min(1),
   password: z.string({ required_error: 'Password is required' }).min(6),
   email: z.string({ required_error: 'Email is required' }).email()
 })
 
 export default defineEventHandler(async event => {
-  const { error, data } = await readValidatedBody(event, createUserSchema.safeParse)
+  const { error, data } = await readValidatedBody(event, schema.safeParse)
   if (error) throw createBadRequestError(error)
 
   const { name, email, password } = data

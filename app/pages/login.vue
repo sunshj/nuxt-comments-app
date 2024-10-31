@@ -13,11 +13,11 @@
         :rules="formRules"
         @submit.prevent
       >
-        <ElFormItem prop="name" required>
+        <ElFormItem v-if="action === 'Sign up'" prop="name" required>
           <ElInput v-model="form.name" clearable placeholder="Your name" />
         </ElFormItem>
 
-        <ElFormItem v-if="action === 'Sign up'" prop="email" required>
+        <ElFormItem prop="email" required>
           <ElInput v-model="form.email" type="email" clearable placeholder="Your email" />
         </ElFormItem>
 
@@ -116,7 +116,7 @@ const submit = useDebounceFn(() => {
     }
 
     if (action.value === 'Sign in') {
-      const loginSuccess = await userStore.login({ name, password }).finally(() => {
+      const loginSuccess = await userStore.login({ email, password }).finally(() => {
         isSubmitting.value = false
       })
 
