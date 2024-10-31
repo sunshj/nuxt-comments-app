@@ -37,7 +37,8 @@ export default defineNuxtConfig({
     'pinia-plugin-persistedstate/nuxt',
     'nuxt-auth-utils',
     '@vueuse/nuxt',
-    'nuxt-security'
+    'nuxt-security',
+    '@nuxtjs/device'
   ],
 
   piniaPluginPersistedstate: {

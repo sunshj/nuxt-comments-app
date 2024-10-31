@@ -1,24 +1,70 @@
 <template>
   <ElContainer direction="vertical" class="h-full w-full">
     <AppHeader title="Dashboard" />
+
     <ElContainer class="h-full">
-      <ElAside width="120px" class="fixed bottom-0 left-0 top-16 overflow-x-hidden pb-16">
+      <div
+        v-if="$device.isMobile"
+        class="z-10 h-8 w-full flex justify-between bg-white px-2 py-1 text-sm text-zinc-900 shadow-sm"
+      >
+        <div class="flex items-center gap-1" @click="sideDrawerVisible = true">
+          <IconMenu />
+          <div>菜单</div>
+        </div>
+      </div>
+
+      <ElAside v-else width="120px" class="fixed bottom-0 left-0 top-16 overflow-x-hidden pb-16">
         <AppMenu />
       </ElAside>
 
       <ElMain
-        class="absolute inset-0 left-120px overflow-y-auto bg-zinc-100 p-4 pt-20 text-zinc-900"
+        class="absolute inset-0 z-2 overflow-y-auto bg-zinc-100 text-zinc-900"
+        :class="{
+          'left-0 px-2 pt-26': $device.isMobile,
+          'left-120px px-4 pt-20': !$device.isMobile
+        }"
       >
-        <slot />
+        <div class="w-full rounded-md bg-white p-4">
+          <slot />
+        </div>
       </ElMain>
     </ElContainer>
+
+    <ClientOnly>
+      <ElDrawer
+        v-if="$device.isMobile"
+        v-model="sideDrawerVisible"
+        :with-header="false"
+        direction="ltr"
+        size="50%"
+        class="pt-16"
+      >
+        <AppMenu />
+      </ElDrawer>
+    </ClientOnly>
   </ElContainer>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+const route = useRoute()
+const { $device } = useNuxtApp()
+
+const sideDrawerVisible = ref(false)
+
+watch(
+  () => route.path,
+  () => {
+    sideDrawerVisible.value = false
+  }
+)
+</script>
 
 <style scoped>
 .el-aside {
   border-right: 1px solid #d9d9d9;
+}
+
+:deep(.el-drawer .el-drawer__body) {
+  padding: 0;
 }
 </style>

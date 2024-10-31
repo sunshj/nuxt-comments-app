@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full flex flex-col gap-4 rounded-xl bg-white p-4">
+  <div class="w-full flex flex-col gap-4">
     <ElForm inline class="w-full">
       <ElFormItem label="筛选" class="min-w-1/4">
         <ElInput v-model="search" clearable placeholder="search name, email, comment." />
