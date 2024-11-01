@@ -60,9 +60,6 @@ export default defineNuxtConfig({
   },
 
   security: {
-    xssValidator: {
-      escapeHtml: false
-    },
     rateLimiter: {
       interval: 60 * 1000,
       headers: true,
@@ -72,6 +69,19 @@ export default defineNuxtConfig({
       contentSecurityPolicy: {
         'img-src': false,
         'script-src': false
+      }
+    }
+  },
+
+  routeRules: {
+    '/api/comment': {
+      security: {
+        xssValidator: false
+      }
+    },
+    'api/_mdc/highlight': {
+      security: {
+        xssValidator: false
       }
     }
   }

@@ -1,6 +1,6 @@
 <template>
   <pre :class="$props.class">
-    <span  class="copy-btn" @click="copy($props.code!)">{{ $props.language ?? 'text' }}</span>
+    <span title="click to copy"  class="copy-btn" @click="copy($props.code!)">{{ $props.language ?? 'text' }}</span>
     <slot />
 </pre>
 </template>

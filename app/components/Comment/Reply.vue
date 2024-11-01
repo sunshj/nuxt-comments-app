@@ -11,16 +11,25 @@
         v-model="form.message"
         type="textarea"
         :autosize="{ minRows: 2, maxRows: 6 }"
-        :maxlength="140"
+        :maxlength="512"
         show-word-limit
         placeholder="请输入内容，Ctrl + Enter 发送"
         @keydown.ctrl.enter="send()"
       />
     </ElFormItem>
 
-    <div class="w-full flex justify-end">
+    <div class="w-full flex items-center justify-between">
+      <ElFormItem class="mb-0 flex items-center" label="预览">
+        <ElSwitch v-model="preview" size="small" />
+      </ElFormItem>
       <ElButton :loading="isSubmitting" type="primary" @click="send()">评论</ElButton>
     </div>
+
+    <MDC
+      v-if="preview"
+      :value="form.message"
+      class="mt-2 border border-amber rounded-lg border-solid p-2 shadow"
+    />
   </ElForm>
 </template>
 
@@ -50,6 +59,8 @@ const formRules: FormRules = {
   ]
 }
 
+const preview = ref(false)
+
 const isSubmitting = ref(false)
 
 const send = useDebounceFn(() => {
@@ -70,6 +81,7 @@ const send = useDebounceFn(() => {
 
     if (success) {
       form.message = ''
+      preview.value = false
       refreshNuxtData('api-comments')
       commentStore.setReplyInputVisible(false)
     }

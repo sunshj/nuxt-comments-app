@@ -37,7 +37,7 @@ model Comment {
   id        Int       @id @default(autoincrement())
   userId    Int
   parentId  Int?
-  content   String
+  content   String    @db.Text
   createdAt DateTime  @default(now())
   parent    Comment?  @relation("childrenComments", fields: [parentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   children  Comment[] @relation("childrenComments")

@@ -31,7 +31,7 @@
       </div>
 
       <div class="text-black">
-        <span v-if="parentId" class="text-blue"> 回复 {{ parent?.user.name }}：</span>
+        <div v-if="parentId" class="mb-1 text-sm text-blue">回复 {{ parent?.user.name }}：</div>
         <MDC :value="content" />
       </div>
       <CommentReply v-if="currentReplyInputVisible" :parent-id="id" class="my-2" />
