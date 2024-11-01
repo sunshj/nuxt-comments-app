@@ -38,8 +38,21 @@ export default defineNuxtConfig({
     'nuxt-auth-utils',
     '@vueuse/nuxt',
     'nuxt-security',
-    '@nuxtjs/device'
+    '@nuxtjs/device',
+    '@nuxtjs/mdc'
   ],
+
+  mdc: {
+    highlight: {
+      theme: 'github-light'
+    },
+    headings: {
+      anchorLinks: false
+    },
+    components: {
+      prose: true
+    }
+  },
 
   piniaPluginPersistedstate: {
     storage: 'localStorage',
@@ -47,6 +60,9 @@ export default defineNuxtConfig({
   },
 
   security: {
+    xssValidator: {
+      escapeHtml: false
+    },
     rateLimiter: {
       interval: 60 * 1000,
       headers: true,

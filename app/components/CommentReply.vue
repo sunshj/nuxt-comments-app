@@ -59,10 +59,10 @@ const send = useDebounceFn(() => {
     isSubmitting.value = true
 
     const success = await commentStore
-      .send({
+      .addComment({
         userId: userSession.user.value!.id,
         parentId: props.parentId,
-        content: form.message
+        content: form.message.trim()
       })
       .finally(() => {
         isSubmitting.value = false
