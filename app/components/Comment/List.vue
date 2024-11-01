@@ -1,8 +1,13 @@
 <template>
-  <div v-for="item in withActiveData" v-bind="$attrs" :key="item.id" class="flex flex-col gap-2">
+  <div
+    v-for="item in withActiveData"
+    v-bind="$attrs"
+    :key="item.id"
+    class="w-full flex flex-col gap-2"
+  >
     <CommentRender v-model:active="item.active" :data="item" />
     <div v-show="item.active">
-      <CommentList v-if="item.children.length > 0" :data="item.children" class="ml-5" />
+      <CommentList v-if="item.children.length > 0" :data="item.children" class="pl-5" />
     </div>
     <ElDivider v-if="!item.parentId" />
   </div>

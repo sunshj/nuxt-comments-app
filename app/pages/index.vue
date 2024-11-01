@@ -1,5 +1,5 @@
 <template>
-  <div class="m-a max-w-3xl flex flex-col p-2">
+  <div class="m-a max-w-3xl w-full flex flex-col p-2">
     <CommentReply v-if="!commentStore.replyInputVisible" />
 
     <div class="flex items-center justify-between gap-2 py-2">

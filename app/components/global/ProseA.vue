@@ -1,5 +1,5 @@
 <template>
-  <NuxtLink :target>
+  <NuxtLink :target="target">
     <slot />
   </NuxtLink>
 </template>
@@ -7,10 +7,10 @@
 <script setup lang="ts">
 const attrs = useAttrs()
 
-const footnoteDataset = ['data-footnote-ref', 'data-footnote-backref']
+const footnoteAttrs = ['data-footnote-ref', 'data-footnote-backref']
 
 const target = computed(() => {
-  if (footnoteDataset.some(dataset => Object.keys(attrs).includes(dataset))) return '_self'
+  if (footnoteAttrs.some(attr => Object.keys(attrs).includes(attr))) return '_self'
   return '_blank'
 })
 </script>

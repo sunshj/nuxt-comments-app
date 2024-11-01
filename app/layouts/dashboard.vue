@@ -47,7 +47,6 @@
 
 <script lang="ts" setup>
 const route = useRoute()
-const { $device } = useNuxtApp()
 
 const sideDrawerVisible = ref(false)
 

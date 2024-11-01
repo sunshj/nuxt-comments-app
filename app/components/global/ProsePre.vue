@@ -1,8 +1,12 @@
 <template>
-  <pre :class="$props.class">
-    <span title="click to copy"  class="copy-btn" @click="copy($props.code!)">{{ $props.language ?? 'text' }}</span>
-    <slot />
-</pre>
+  <div class="relative w-full">
+    <span title="click to copy" class="copy-btn" @click="copy($props.code!)">
+      {{ $props.language ?? 'text' }}
+    </span>
+    <pre :class="$props.class">
+      <slot />  
+    </pre>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -43,24 +47,24 @@ watchEffect(() => {
 </script>
 
 <style>
-pre > code {
+pre {
+  font-size: 14px;
+  background-color: white;
+  padding: 0 12px;
+  border-radius: 6px;
+  margin-top: 1em;
+  overflow-x: auto;
+}
+
+pre code {
   display: block;
-  margin-top: -2em;
+  margin-top: -1em;
+  margin-bottom: -2em;
   white-space: pre;
 }
 
 pre code .line {
   display: block;
-}
-
-pre {
-  font-size: 14px;
-  background-color: white;
-  padding: 0 6px;
-  border-radius: 6px;
-  overflow-x: auto;
-  margin-top: 1em;
-  position: relative;
 }
 
 .copy-btn {

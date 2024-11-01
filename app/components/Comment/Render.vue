@@ -1,9 +1,9 @@
 <template>
-  <div class="flex items-start gap-2 rounded-md p-2">
+  <div class="w-full flex items-start gap-2 rounded-md p-2">
     <div :id="`comment-${id}`" class="pt-1">
       <ElAvatar :src="user.avatarUrl!" />
     </div>
-    <div class="flex flex-1 flex-col gap-2">
+    <div class="w-full flex flex-1 flex-col gap-2 overflow-hidden">
       <div class="flex justify-between">
         <div class="flex gap-2 text-sm">
           <div class="text-gray-600 font-bold">{{ user?.name }}</div>
@@ -30,9 +30,9 @@
         </div>
       </div>
 
-      <div class="text-black">
+      <div class="w-full text-black">
         <div v-if="parentId" class="mb-1 text-sm text-blue">回复 {{ parent?.user.name }}：</div>
-        <MDC :value="content" />
+        <MDC class="w-full" :value="content" />
       </div>
       <CommentReply v-if="currentReplyInputVisible" :parent-id="id" class="my-2" />
     </div>
