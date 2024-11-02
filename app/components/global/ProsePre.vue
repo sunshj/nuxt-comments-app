@@ -50,7 +50,7 @@ watchEffect(() => {
 pre {
   font-size: 14px;
   background-color: white;
-  padding: 0 12px;
+  padding: 10px;
   border-radius: 6px;
   margin-top: 1em;
   overflow-x: auto;

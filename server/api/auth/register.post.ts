@@ -14,9 +14,12 @@ export default defineEventHandler(async event => {
   const hashedPassword = await hashPassword(password)
   const avatarUrl = getGravatarUrl(email)
 
+  const isFirstUser = (await prisma.user.count()) === 0
+  const role = isFirstUser ? 'ADMIN' : 'USER'
+
   const user = await prisma.user
     .create({
-      data: { name, email, password: hashedPassword, avatarUrl }
+      data: { name, email, password: hashedPassword, avatarUrl, role }
     })
     .catch(error => {
       if (error.code === 'P2002') {
