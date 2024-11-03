@@ -5,13 +5,14 @@ const schema = z.object({
   type: z.enum(['all', 'comment', 'replies']).optional().default('all'),
   page: z.coerce.number().optional().default(1),
   size: z.coerce.number().optional().default(10),
-  search: z.string().optional().default('')
+  search: z.string().optional().default(''),
+  url: z.string().optional().default('')
 })
 
 export default defineEventHandler(async event => {
   await requireUserSession(event)
 
-  const { sort, type, page, size, search } = await getValidatedQuery(event, schema.parse)
+  const { sort, type, page, size, search, url } = await getValidatedQuery(event, schema.parse)
 
   const where = {
     ...(type === 'comment'
@@ -19,6 +20,10 @@ export default defineEventHandler(async event => {
       : type === 'replies'
         ? { parentId: { not: null } }
         : {}),
+
+    url: {
+      contains: url
+    },
 
     OR: [
       {

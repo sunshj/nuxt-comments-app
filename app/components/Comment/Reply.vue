@@ -36,6 +36,7 @@
 <script lang="ts" setup>
 import type { FormInstance, FormRules } from 'element-plus'
 
+const route = useRoute()
 const commentStore = useCommentStore()
 const userSession = useUserSession()
 
@@ -71,8 +72,9 @@ const send = useDebounceFn(() => {
 
     const success = await commentStore
       .addComment({
+        url: route.path,
         userId: userSession.user.value!.id,
-        parentId: props.parentId,
+        parentId: props.parentId ?? null,
         content: form.message.trim()
       })
       .finally(() => {

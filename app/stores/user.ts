@@ -15,7 +15,7 @@ export const useUserStore = defineStore(
       user.value = newUser
     }
 
-    async function login(data: { email: string; password: string }) {
+    async function login(data: Pick<User, 'email' | 'password'>) {
       const user = await $fetch('/api/auth/login', {
         method: 'POST',
         body: data
@@ -28,7 +28,7 @@ export const useUserStore = defineStore(
       return user
     }
 
-    async function register(data: { name: string; email: string; password: string }) {
+    async function register(data: Pick<User, 'email' | 'password' | 'name'>) {
       return await $fetch('/api/auth/register', {
         method: 'POST',
         body: data

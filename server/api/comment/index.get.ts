@@ -1,13 +1,14 @@
 import { z } from 'zod'
 
 const schema = z.object({
+  url: z.string().min(1),
   type: z.enum(['hot', 'recent', 'oldest']).optional().default('recent')
 })
 
 export default defineEventHandler(async event => {
   await requireUserSession(event)
 
-  const { type } = await getValidatedQuery(event, schema.parse)
+  const { type, url } = await getValidatedQuery(event, schema.parse)
 
   const comments = await prisma.comment.findMany({
     include: {
@@ -26,6 +27,9 @@ export default defineEventHandler(async event => {
           }
         }
       }
+    },
+    where: {
+      url
     }
   })
 

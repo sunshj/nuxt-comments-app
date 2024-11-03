@@ -13,7 +13,7 @@ export const useCommentStore = defineStore('comment', () => {
     replyInputVisible.value = visible
   }
 
-  async function addComment(data: { userId: number; parentId?: number; content: string }) {
+  async function addComment(data: Pick<CommentItem, 'url' | 'userId' | 'parentId' | 'content'>) {
     return await $fetch('/api/comment', {
       method: 'POST',
       body: data

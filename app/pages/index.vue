@@ -38,11 +38,12 @@ useServerHead({
   title: 'Home'
 })
 
+const route = useRoute()
 const commentStore = useCommentStore()
 
 const type = ref<'recent' | 'oldest' | 'hot'>('recent')
 
-const queryParams = computed(() => ({ type: type.value }))
+const queryParams = computed(() => ({ type: type.value, url: route.path }))
 
 const { data, error, status, refresh } = useFetch<{ comments: CommentItem[]; total: number }>(
   '/api/comment',
