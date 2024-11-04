@@ -19,9 +19,9 @@
           <ElButton
             v-if="!commentStore.replyInputVisible && !parentId && children.length > 0"
             size="small"
-            @click="active = !active"
+            @click="collapse = !collapse"
           >
-            {{ active ? '收起' : `(${children.length})展开` }}
+            {{ collapse ? `(${children.length})展开` : '收起' }}
           </ElButton>
 
           <ElButton size="small" type="primary" @click="showReplyInput">
@@ -34,7 +34,12 @@
         <div v-if="parentId" class="mb-1 text-sm text-blue">回复 {{ parent?.user.name }}：</div>
         <MDC class="w-full" :value="content" />
       </div>
-      <CommentReply v-if="currentReplyInputVisible" :parent-id="id" class="my-2" />
+      <CommentReply
+        v-if="currentReplyInputVisible"
+        :reply-to-id="id"
+        :reply-to-name="user.name"
+        class="my-2"
+      />
     </div>
 
     <ClientOnly>
@@ -58,12 +63,12 @@ const route = useRoute()
 const commentStore = useCommentStore()
 
 const props = defineProps<{
-  data: CommentItem
+  comment: CommentItem
 }>()
 
-const active = defineModel('active')
+const collapse = defineModel<boolean>('collapse', { default: false })
 
-const { id, user, content, parentId, parent, createdAt, children } = toRefs(reactive(props.data))
+const { id, user, content, parentId, parent, createdAt, children } = toRefs(reactive(props.comment))
 
 const previewMode = computed(() => route.hash === `#comment-${id.value}`)
 
@@ -97,9 +102,9 @@ function showReplyInput() {
     commentStore.setReplyInputVisible(true)
   }
 
-  commentStore.setCurrentReply(props.data)
+  commentStore.setCurrentReply(props.comment)
   nextTick(() => {
-    const el = document.querySelector(`#comment-${parentId.value || id.value}`)
+    const el = document.querySelector(`#comment-${id.value}`)
     el?.scrollIntoView({ behavior: 'smooth' })
   })
 }

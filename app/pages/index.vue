@@ -27,7 +27,7 @@
 
     <ElEmpty v-else-if="!data?.comments.length" description="暂无评论" />
 
-    <CommentList v-else :data="data.comments" />
+    <CommentList v-else :comments="data.comments" />
   </div>
 </template>
 

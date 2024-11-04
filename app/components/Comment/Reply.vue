@@ -13,7 +13,7 @@
         :autosize="{ minRows: 2, maxRows: 6 }"
         :maxlength="512"
         show-word-limit
-        placeholder="请输入内容，Ctrl + Enter 发送"
+        :placeholder="placeholder"
         @keydown.ctrl.enter="send()"
       />
     </ElFormItem>
@@ -41,8 +41,15 @@ const commentStore = useCommentStore()
 const userSession = useUserSession()
 
 const props = defineProps<{
-  parentId?: number
+  replyToId?: number
+  replyToName?: string
 }>()
+
+const placeholder = computed(() =>
+  props.replyToId && props.replyToName
+    ? `回复 ${props.replyToName}：`
+    : '请输入内容，Ctrl + Enter 发送s'
+)
 
 const formRef = ref<FormInstance | null>(null)
 
@@ -74,7 +81,7 @@ const send = useDebounceFn(() => {
       .addComment({
         url: route.path,
         userId: userSession.user.value!.id,
-        parentId: props.parentId ?? null,
+        parentId: props.replyToId ?? null,
         content: form.message.trim()
       })
       .finally(() => {

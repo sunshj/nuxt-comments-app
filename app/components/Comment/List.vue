@@ -1,13 +1,13 @@
 <template>
   <div
-    v-for="item in withActiveData"
+    v-for="item in extendedComments"
     v-bind="$attrs"
     :key="item.id"
     class="w-full flex flex-col gap-2"
   >
-    <CommentRender v-model:active="item.active" :data="item" />
-    <div v-show="item.active">
-      <CommentList v-if="item.children.length > 0" :data="item.children" class="pl-5" />
+    <CommentRender v-model:collapse="item.collapsed" :comment="item" />
+    <div v-show="!item.collapsed">
+      <CommentList v-if="item.children.length > 0" :comments="item.children" class="pl-5" />
     </div>
     <ElDivider v-if="!item.parentId" />
   </div>
@@ -17,12 +17,12 @@
 import type { CommentItem } from '~~/server/utils'
 
 const props = defineProps<{
-  data: CommentItem[]
+  comments: CommentItem[]
 }>()
 
-const withActiveData = ref<Array<CommentItem & { active: boolean }>>([])
+const extendedComments = ref<Array<CommentItem & { collapsed: boolean }>>([])
 
 watchEffect(() => {
-  withActiveData.value = props.data.map(v => ({ ...v, active: true }))
+  extendedComments.value = props.comments.map(v => ({ ...v, collapsed: false }))
 })
 </script>
