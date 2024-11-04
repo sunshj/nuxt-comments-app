@@ -26,7 +26,7 @@
     </div>
 
     <MDC
-      v-if="preview"
+      v-if="preview && form.message"
       :value="form.message"
       class="mt-2 border border-amber rounded-lg border-solid p-2 shadow"
     />

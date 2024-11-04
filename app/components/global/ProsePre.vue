@@ -4,7 +4,9 @@
       {{ $props.language ?? 'text' }}
     </span>
     <pre :class="$props.class">
-      <slot />  
+      <div class="flex-1 px-3">  
+        <slot />
+      </div> 
     </pre>
   </div>
 </template>
@@ -50,17 +52,18 @@ watchEffect(() => {
 pre {
   font-size: 14px;
   background-color: white;
-  padding: 10px;
   border-radius: 6px;
   margin-top: 1em;
   overflow-x: auto;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
 }
 
 pre code {
   display: block;
-  margin-top: -1em;
-  margin-bottom: -2em;
   white-space: pre;
+  margin: -2em 0;
 }
 
 pre code .line {
@@ -82,6 +85,6 @@ pre code .line {
 }
 
 .copy-btn:hover {
-  opacity: 1 !important;
+  opacity: 1;
 }
 </style>
