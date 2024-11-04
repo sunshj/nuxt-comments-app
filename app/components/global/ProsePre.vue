@@ -41,10 +41,8 @@ defineProps({
 
 const { copy, copied } = useClipboard({ legacy: true })
 
-watchEffect(() => {
-  if (copied.value) {
-    ElMessage.success('copied')
-  }
+whenever(copied, () => {
+  ElMessage.success('copied')
 })
 </script>
 

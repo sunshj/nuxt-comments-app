@@ -45,19 +45,13 @@
       <ElTable
         ref="tableRef"
         v-loading="status === 'pending'"
-        stripe
-        border
         :data="data?.comments"
         style="width: 100%"
+        border
         row-key="id"
         @selection-change="handleSelectionChange"
       >
         <ElTableColumn v-if="hasAdminRole" type="selection" reserve-selection width="55" />
-        <ElTableColumn type="expand">
-          <template #default="{ row }">
-            <MDC :value="row.content" class="border border-gray-200 border-solid" />
-          </template>
-        </ElTableColumn>
         <ElTableColumn prop="id" label="ID" width="60" />
         <ElTableColumn prop="url" label="url" width="100" show-overflow-tooltip />
         <ElTableColumn label="type" width="80">
@@ -74,9 +68,23 @@
             <ElTag v-else type="info">{{ row.user.role }}</ElTag>
           </template>
         </ElTableColumn>
-        <ElTableColumn prop="parentId" label="parentId" width="100" />
+        <ElTableColumn prop="parentId" label="parentId" width="90" />
         <ElTableColumn prop="parent.user.name" label="replyTo" width="80" />
-        <ElTableColumn prop="content" label="comment" width="100" show-overflow-tooltip />
+
+        <ElTableColumn label="comment" header-align="center" :render-header="renderContentHeader">
+          <ElTableColumn prop="content">
+            <template #default="{ row }">
+              <div class="overflow-hidden text-ellipsis whitespace-nowrap">{{ row.content }}</div>
+            </template>
+          </ElTableColumn>
+
+          <ElTableColumn type="expand">
+            <template #default="{ row }">
+              <MDC :value="row.content" class="border border-gray-200 border-solid" />
+            </template>
+          </ElTableColumn>
+        </ElTableColumn>
+
         <ElTableColumn label="createdAt" width="100">
           <template #default="{ row }">
             {{ timeAgo(row.createdAt) }}
@@ -168,14 +176,20 @@ const { data, status, error, refresh } = useFetch('/api/comment/list', {
 
 const debouncedRefresh = useDebounceFn(refresh, 300)
 
-watchEffect(() => {
-  if (error.value) {
-    toastFetchError(error.value)
-  }
+whenever(error, () => {
+  toastFetchError(error.value!)
 })
+
+const focused = useWindowFocus()
+whenever(focused, () => refresh())
 
 function handleSelectionChange(selection: any[]) {
   selections.value = selection.map(item => item.id)
+}
+
+function renderContentHeader({ column }: any) {
+  column.rowSpan = 2
+  return column.label
 }
 
 function previewComment(id: number) {

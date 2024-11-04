@@ -24,6 +24,7 @@ export default defineNuxtConfig({
       maxAge: 60 * 60 * 24 * 7 // 1 week
     },
     public: {
+      repoUrl: 'https://github.com/sunshj/nuxt-comments-app',
       buildTime: Date.now(),
       gitSha: execSync('git rev-parse HEAD').toString().trim()
     }

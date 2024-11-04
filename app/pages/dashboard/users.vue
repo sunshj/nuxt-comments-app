@@ -13,10 +13,10 @@
     <ClientOnly>
       <ElTable
         v-loading="status === 'pending'"
-        stripe
         border
         :data="data?.users"
         style="width: 100%"
+        header-cell-class-name="bg-$el-fill-color-light"
       >
         <ElTableColumn prop="id" label="ID" width="80" />
         <ElTableColumn prop="name" label="name" width="120" />
@@ -107,11 +107,12 @@ const { data, error, status, refresh } = useFetch('/api/user', {
 
 const debouncedRefresh = useDebounceFn(refresh, 300)
 
-watchEffect(() => {
-  if (error.value) {
-    toastFetchError(error.value)
-  }
+whenever(error, () => {
+  toastFetchError(error.value!)
 })
+
+const focused = useWindowFocus()
+whenever(focused, () => refresh())
 
 function showEditDialog(id: number) {
   console.log(id)

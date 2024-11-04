@@ -65,10 +65,8 @@ const {
   deep: true
 })
 
-watchEffect(() => {
-  if (error.value) {
-    toastFetchError(error.value)
-  }
+whenever(error, () => {
+  toastFetchError(error.value!)
 })
 
 async function updateUser() {

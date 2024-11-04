@@ -53,9 +53,10 @@ const { data, error, status, refresh } = useFetch<{ comments: CommentItem[]; tot
   }
 )
 
-watchEffect(() => {
-  if (error.value) {
-    toastFetchError(error.value)
-  }
+whenever(error, () => {
+  toastFetchError(error.value!)
 })
+
+const focused = useWindowFocus()
+whenever(focused, () => refresh())
 </script>

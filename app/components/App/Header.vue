@@ -7,6 +7,26 @@
 
     <div class="flex items-center gap-4">
       <ClientOnly>
+        <ElPopover placement="bottom" width="fit-content" trigger="click">
+          <template #reference>
+            <div class="m-2 flex-center cursor-pointer">
+              <IconInfo class="text-xl text-gray-300" />
+            </div>
+          </template>
+
+          <NuxtLink :href="gitCommitUrl" target="_blank">
+            Built {{ builtTime }} ({{ shortenGitSha }})
+          </NuxtLink>
+        </ElPopover>
+
+        <template #fallback>
+          <div class="m-2 flex-center cursor-pointer">
+            <IconInfo class="text-xl text-gray-300" />
+          </div>
+        </template>
+      </ClientOnly>
+
+      <ClientOnly>
         <ElDropdown>
           <ElAvatar :src="userStore.user?.avatarUrl!" class="cursor-pointer">
             {{ userStore.user?.name }}
@@ -35,6 +55,7 @@
 
 <script lang="ts" setup>
 const userStore = useUserStore()
+const config = useRuntimeConfig()
 
 const props = withDefaults(
   defineProps<{
@@ -45,4 +66,8 @@ const props = withDefaults(
     showProfile: true
   }
 )
+
+const builtTime = timeAgo(config.public.buildTime)
+const shortenGitSha = config.public.gitSha.slice(0, 5)
+const gitCommitUrl = `${config.public.repoUrl}/commit/${config.public.gitSha}`
 </script>
