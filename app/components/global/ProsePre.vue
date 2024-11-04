@@ -52,27 +52,11 @@ pre {
   background-color: #8881;
   border: 1px solid #8881;
   border-radius: 6px;
-  margin-top: 10px;
+  margin: 10px 0;
   overflow-x: auto;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-}
-
-.line-numbers-wrapper {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 3;
-  border-right: 1px solid var(--vp-code-block-divider-color);
-  padding-top: 20px;
-  width: 32px;
-  text-align: center;
-  font-family: var(--vp-font-family-mono);
-  line-height: var(--vp-code-line-height);
-  font-size: var(--vp-code-font-size);
-  color: var(--vp-code-line-number-color);
 }
 
 pre code {
