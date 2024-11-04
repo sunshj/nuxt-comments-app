@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "nuxt dev --host",
-    "studio": "prisma studio",
+    "db:studio": "prisma studio",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "build": "nuxt build",
@@ -12,7 +12,7 @@
     "stop": "pm2 stop ecosystem.config.cjs",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
+    "postinstall": "nuxt prepare && prisma generate",
     "typecheck": "nuxt typecheck",
     "lint": "eslint . --cache",
     "lint:fix": "eslint . --fix --cache",
@@ -48,7 +48,8 @@
     "prisma": "^5.21.1",
     "simple-git-hooks": "^2.11.1",
     "unocss": "^0.63.6",
-    "unplugin-vue-router": "^0.10.8"
+    "unplugin-vue-router": "^0.10.8",
+    "vue-tsc": "^2.1.10"
   },
   "pnpm": {
     "patchedDependencies": {
