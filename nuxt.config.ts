@@ -45,13 +45,13 @@ export default defineNuxtConfig({
 
   mdc: {
     highlight: {
-      theme: 'github-light'
+      theme: {
+        default: 'github-light-default',
+        dark: 'github-dark-default'
+      }
     },
     headings: {
       anchorLinks: false
-    },
-    components: {
-      prose: true
     }
   },
 
