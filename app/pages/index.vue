@@ -28,6 +28,7 @@
     <ElEmpty v-else-if="!data?.comments.length" description="暂无评论" />
 
     <CommentList v-else :comments="data.comments" />
+    <ElBacktop v-if="!$device.isMobile" target=".el-main" :right="100" :bottom="100" />
   </div>
 </template>
 
@@ -36,6 +37,10 @@ import type { CommentItem } from '~~/server/utils'
 
 useServerHead({
   title: 'Home'
+})
+
+definePageMeta({
+  pageTransition: false
 })
 
 const route = useRoute()
