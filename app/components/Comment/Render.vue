@@ -32,7 +32,7 @@
 
       <div class="w-full text-primary">
         <div v-if="parentId" class="mb-1 text-sm text-blue">回复 {{ parent?.user.name }}：</div>
-        <MDC class="w-full" :value="content" />
+        <MDC class="w-full lh-relaxed" :value="content" />
       </div>
       <CommentReply
         v-if="currentReplyInputVisible"

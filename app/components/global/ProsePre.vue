@@ -3,7 +3,7 @@
     <span title="click to copy" class="copy-btn" @click="copy($props.code!)">
       {{ $props.language ?? 'code' }}
     </span>
-    <pre :class="$props.class">
+    <pre :class="$props.class" class="border border-solid border-fill bg-fill">
       <div class="flex-1">  
         <slot />
       </div> 
@@ -49,8 +49,6 @@ whenever(copied, () => {
 <style>
 pre {
   font-size: 14px;
-  background-color: #8881;
-  border: 1px solid #8881;
   border-radius: 6px;
   margin: 10px 0;
   overflow-x: auto;
@@ -77,11 +75,12 @@ pre code .line {
 
 pre code .line.highlight {
   display: inline-block;
-  background-color: #8e96aa24;
+  background-color: #8e96aa24 !important;
 }
 
 pre code .line.diff.remove {
   background-color: #f43f5e24;
+  opacity: 0.6;
 }
 
 pre code .line.diff.add {
@@ -111,9 +110,13 @@ pre code .line.diff.add::before {
   text-transform: uppercase;
   font-size: 16px;
   font-weight: bold;
-  color: #64778b;
-  opacity: 0.2;
+  color: #3c3c438f;
+  opacity: 0.3;
   transition: all 0.2s ease-in-out;
+}
+
+.dark .copy-btn {
+  color: #ebebf561;
 }
 
 .copy-btn:hover {

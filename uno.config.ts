@@ -9,6 +9,8 @@ export default defineConfig({
     'text-secondary': 'text-gray-500 dark:text-gray-600',
     'bg-primary': 'bg-white dark:bg-dark',
     'bg-secondary': 'bg-zinc-100 dark:bg-[#0a0a0a]',
-    'border-primary': 'border-gray-200 dark:border-dark'
+    'bg-fill': 'bg-[#8881] dark:bg-[#161618]',
+    'border-primary': 'border-gray-200 dark:border-dark',
+    'border-fill': 'border-[#8881] dark:border-[#161618]'
   }
 })
