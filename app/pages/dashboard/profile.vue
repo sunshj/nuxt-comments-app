@@ -12,7 +12,12 @@
       </template>
     </ElPageHeader>
 
-    <ElForm v-if="userForm" class="rounded-md bg-white px-4 py-6" :model="userForm" @submit.prevent>
+    <ElForm
+      v-if="userForm"
+      class="rounded-md px-4 py-6 bg-primary"
+      :model="userForm"
+      @submit.prevent
+    >
       <ElFormItem prop="name" label="Name">
         <ElInput v-model="userForm.name" clearable />
       </ElFormItem>

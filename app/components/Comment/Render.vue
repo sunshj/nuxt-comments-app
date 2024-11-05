@@ -6,12 +6,12 @@
     <div class="w-full flex flex-1 flex-col gap-2 overflow-hidden">
       <div class="flex justify-between">
         <div class="flex gap-2 text-sm">
-          <div class="text-gray-600 font-bold">{{ user?.name }}</div>
+          <div class="font-bold text-primary">{{ user?.name }}</div>
           <ClientOnly>
-            <div class="text-gray-500">{{ timeAgo(createdAt) }}</div>
+            <div class="text-secondary">{{ timeAgo(createdAt) }}</div>
           </ClientOnly>
           <DevOnly>
-            <div class="text-gray-500">#{{ id }}</div>
+            <div class="text-secondary">#{{ id }}</div>
           </DevOnly>
         </div>
 
@@ -30,7 +30,7 @@
         </div>
       </div>
 
-      <div class="w-full text-black">
+      <div class="w-full text-primary">
         <div v-if="parentId" class="mb-1 text-sm text-blue">回复 {{ parent?.user.name }}：</div>
         <MDC class="w-full" :value="content" />
       </div>

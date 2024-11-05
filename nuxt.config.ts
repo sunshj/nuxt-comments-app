@@ -40,8 +40,22 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     'nuxt-security',
     '@nuxtjs/device',
-    '@nuxtjs/mdc'
+    '@nuxtjs/mdc',
+    '@nuxtjs/color-mode'
   ],
+
+  colorMode: {
+    classSuffix: ''
+  },
+
+  elementPlus: {
+    icon: false,
+    themes: ['dark']
+  },
+
+  vueuse: {
+    ssrHandlers: true
+  },
 
   mdc: {
     highlight: {

@@ -1,7 +1,7 @@
 <template>
   <div class="relative w-full">
     <span title="click to copy" class="copy-btn" @click="copy($props.code!)">
-      {{ $props.language ?? 'text' }}
+      {{ $props.language ?? 'code' }}
     </span>
     <pre :class="$props.class">
       <div class="flex-1">  

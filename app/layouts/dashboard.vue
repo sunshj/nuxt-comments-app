@@ -5,7 +5,7 @@
     <ElContainer class="h-full">
       <div
         v-if="$device.isMobile"
-        class="z-10 h-8 w-full flex justify-between bg-white px-2 py-1 text-sm text-zinc-900 shadow-sm"
+        class="z-10 h-8 w-full flex justify-between px-2 py-1 text-sm shadow-sm bg-primary text-primary"
       >
         <div class="flex items-center gap-1" @click="sideDrawerVisible = true">
           <IconMenu />
@@ -18,13 +18,13 @@
       </ElAside>
 
       <ElMain
-        class="absolute inset-0 z-2 overflow-y-auto bg-zinc-100 text-zinc-900"
+        class="absolute inset-0 z-2 overflow-y-auto bg-secondary"
         :class="{
           'left-0 px-2 pt-26': $device.isMobile,
           'left-120px px-4 pt-20': !$device.isMobile
         }"
       >
-        <div class="w-full rounded-md bg-white p-4">
+        <div class="w-full rounded-md p-4 bg-primary">
           <slot />
         </div>
       </ElMain>
@@ -59,10 +59,6 @@ watch(
 </script>
 
 <style scoped>
-.el-aside {
-  border-right: 1px solid #d9d9d9;
-}
-
 :deep(.el-drawer .el-drawer__body) {
   padding: 0;
 }

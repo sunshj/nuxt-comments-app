@@ -3,7 +3,7 @@
     <ElContainer direction="vertical" class="h-screen w-full flex flex-col">
       <AppHeader title="Nuxt Comments App" :show-profile="false" />
       <ElMain
-        class="flex-1 justify-center bg-zinc-100 text-zinc-900"
+        class="flex-1 justify-center bg-secondary"
         :class="{
           'p-0': $device.isMobile
         }"

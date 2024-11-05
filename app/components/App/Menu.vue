@@ -1,5 +1,5 @@
 <template>
-  <ElMenu :default-active="$route.name" active-text-color="#0051c3" class="border-r-none">
+  <ElMenu :default-active="$route.name" class="border-r-none">
     <ElMenuItem
       v-for="menu in menus"
       :key="menu.path"
@@ -33,6 +33,6 @@ const menus = computed(() => {
 
 <style scoped>
 .el-menu-item.is-active {
-  background-color: #f2f2f2;
+  background-color: var(--el-fill-color);
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
-  <div class="h-full flex-center bg-blueGray-50">
+  <div class="h-full flex-center bg-secondary">
     <div
-      class="z-1 w-100 flex flex-col gap-4 border border-gray-200 rounded-lg border-solid bg-white px-6 py-4 shadow-md"
+      class="z-1 w-100 flex flex-col gap-4 border rounded-lg border-solid px-6 py-4 shadow-md border-primary bg-primary"
     >
       <h1 class="text-center text-2xl font-bold">{{ action }}</h1>
       <ElSegmented v-model="action" :options="actionOptions" />
