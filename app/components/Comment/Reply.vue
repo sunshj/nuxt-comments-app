@@ -48,7 +48,7 @@ const props = defineProps<{
 const placeholder = computed(() =>
   props.replyToId && props.replyToName
     ? `回复 ${props.replyToName}：`
-    : '请输入内容，Ctrl + Enter 发送s'
+    : '请输入内容，Ctrl + Enter 发送'
 )
 
 const formRef = ref<FormInstance | null>(null)
