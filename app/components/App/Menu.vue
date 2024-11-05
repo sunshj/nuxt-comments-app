@@ -19,11 +19,11 @@ const { user } = useUserSession()
 const menus = computed(() => {
   if (!user.value) return []
   return routes
-    .filter(r => !!r.meta.menuConfig && r.meta.roles?.includes(user.value!.role))
-    .sort((a, b) => (a.meta.menuConfig?.order || 0) - (b.meta.menuConfig?.order || 0))
+    .filter(r => !!r.meta.menu && r.meta.roles?.includes(user.value!.role))
+    .sort((a, b) => (a.meta.menu?.order || 0) - (b.meta.menu?.order || 0))
     .map(({ meta, path, name }) => {
       return {
-        ...meta.menuConfig,
+        ...meta.menu,
         name: name?.toString(),
         path
       }

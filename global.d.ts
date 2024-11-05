@@ -2,8 +2,8 @@ import type { Role } from '@prisma/client'
 
 declare module '#app' {
   interface PageMeta {
-    /** dashboard menus  */
-    menuConfig?: {
+    /** dashboard menu config  */
+    menu?: {
       title: string
       order?: number
     }
