@@ -30,6 +30,10 @@ export default defineNuxtConfig({
     }
   },
 
+  nitro: {
+    preset: 'cloudflare-pages'
+  },
+
   modules: [
     '@unocss/nuxt',
     '@element-plus/nuxt',
@@ -41,7 +45,8 @@ export default defineNuxtConfig({
     'nuxt-security',
     '@nuxtjs/device',
     '@nuxtjs/mdc',
-    '@nuxtjs/color-mode'
+    '@nuxtjs/color-mode',
+    'nitro-cloudflare-dev'
   ],
 
   colorMode: {
@@ -66,6 +71,11 @@ export default defineNuxtConfig({
     },
     headings: {
       anchorLinks: false
+    },
+    remarkPlugins: {
+      emoji: {
+        src: 'remark-emoji'
+      }
     }
   },
 

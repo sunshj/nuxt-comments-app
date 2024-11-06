@@ -9,6 +9,7 @@ export default defineEventHandler(async event => {
   await requireUserSession(event)
 
   const { type, url } = await getValidatedQuery(event, schema.parse)
+  const prisma = usePrisma(event)
 
   const comments = await prisma.comment.findMany({
     include: {

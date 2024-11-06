@@ -14,6 +14,8 @@ export default defineEventHandler(async event => {
   const hashedPassword = await hashPassword(password)
   const avatarUrl = getGravatarUrl(email)
 
+  const prisma = usePrisma(event)
+
   const isFirstUser = (await prisma.user.count()) === 0
   const role = isFirstUser ? 'ADMIN' : 'USER'
 

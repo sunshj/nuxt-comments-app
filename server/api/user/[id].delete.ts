@@ -3,6 +3,7 @@ export default defineEventHandler(async event => {
 
   const id = getRouterParam(event, 'id')
   if (user.id === Number(id)) throw createForbiddenError('You cannot delete yourself')
+  const prisma = usePrisma(event)
 
   return prisma.user.delete({
     where: {

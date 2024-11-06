@@ -11,6 +11,7 @@ export default defineEventHandler(async event => {
   const id = getRouterParam(event, 'id')
   const { error, data } = await readValidatedBody(event, updateUserSchema.safeParse)
   if (error) throw createBadRequestError(error)
+  const prisma = usePrisma(event)
 
   const user = await prisma.user
     .update({

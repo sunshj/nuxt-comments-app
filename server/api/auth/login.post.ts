@@ -12,6 +12,7 @@ export default defineEventHandler(async event => {
   if (error) throw createBadRequestError(error)
   const { email, password } = data
 
+  const prisma = usePrisma(event)
   const user = await prisma.user.findUnique({
     where: { email },
     omit: {

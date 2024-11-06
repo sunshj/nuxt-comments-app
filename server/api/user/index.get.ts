@@ -10,6 +10,7 @@ export default defineEventHandler(async event => {
   await requireRoles(event, ['ADMIN'])
 
   const { page, size, search } = await getValidatedQuery(event, schema.parse)
+  const prisma = usePrisma(event)
 
   const where = {
     OR: [

@@ -6,6 +6,7 @@ const schema = z.object({
 
 export default defineEventHandler(async event => {
   await requireRoles(event, ['ADMIN'])
+  const prisma = usePrisma(event)
 
   const { ids } = await readValidatedBody(event, schema.parse)
   return prisma.comment.deleteMany({

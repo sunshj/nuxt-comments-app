@@ -12,6 +12,7 @@ export default defineEventHandler(async event => {
 
   const { error, data } = await readValidatedBody(event, schema.safeParse)
   if (error) throw createBadRequestError(error)
+  const prisma = usePrisma(event)
 
   return prisma.comment.create({ data })
 })

@@ -13,6 +13,7 @@ export default defineEventHandler(async event => {
   await requireUserSession(event)
 
   const { sort, type, page, size, search, url } = await getValidatedQuery(event, schema.parse)
+  const prisma = usePrisma(event)
 
   const where = {
     ...(type === 'comment'

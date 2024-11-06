@@ -1,7 +1,7 @@
 <template>
   <div class="relative w-full">
     <span title="click to copy" class="copy-btn" @click="copy($props.code!)">
-      {{ $props.language ?? 'code' }}
+      {{ $props.filename ? $props.filename : ($props.language?.toUpperCase() ?? 'code') }}
     </span>
     <pre :class="$props.class" class="border border-solid border-fill bg-fill">
       <div class="flex-1">  
@@ -107,7 +107,6 @@ pre code .line.diff.add::before {
   z-index: 100;
   cursor: pointer;
   padding: 6px;
-  text-transform: uppercase;
   font-size: 16px;
   font-weight: bold;
   color: #3c3c438f;
