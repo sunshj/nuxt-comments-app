@@ -8,9 +8,10 @@ export default defineConfig({
     'text-primary': 'text-gray-700 dark:text-gray-300',
     'text-secondary': 'text-gray-500 dark:text-gray-600',
     'bg-primary': 'bg-white dark:bg-dark',
-    'bg-secondary': 'bg-zinc-100 dark:bg-[#0a0a0a]',
+    'bg-secondary': 'bg-#fefefe  dark:bg-#0a0a0a',
     'bg-fill': 'bg-[#8881] dark:bg-[#161618]',
     'border-primary': 'border-gray-200 dark:border-dark',
-    'border-fill': 'border-[#8881] dark:border-[#161618]'
+    'border-fill': 'border-[#8881] dark:border-[#161618]',
+    'icon-primary': 'text-gray-300 dark:text-gray-400'
   }
 })

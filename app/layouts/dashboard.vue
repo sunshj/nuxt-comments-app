@@ -8,12 +8,16 @@
         class="z-10 h-8 w-full flex justify-between px-2 py-1 text-sm shadow-sm bg-primary text-primary"
       >
         <div class="flex items-center gap-1" @click="sideDrawerVisible = true">
-          <IconMenu />
+          <Icon name="lucide:menu" />
           <div>菜单</div>
         </div>
       </div>
 
-      <ElAside v-else width="120px" class="fixed bottom-0 left-0 top-16 overflow-x-hidden pb-16">
+      <ElAside
+        v-else
+        width="120px"
+        class="fixed bottom-0 left-0 top-16 overflow-x-hidden border border-solid pb-16 border-primary"
+      >
         <AppMenu />
       </ElAside>
 

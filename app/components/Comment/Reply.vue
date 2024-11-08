@@ -3,7 +3,7 @@
     ref="formRef"
     :model="form"
     :rules="formRules"
-    class="border border-gray-200 border-opacity-20 rounded-lg border-solid p-2 shadow-sm bg-primary"
+    class="border rounded-lg border-solid p-2 shadow-sm border-primary bg-primary"
     @submit.prevent
   >
     <ElFormItem prop="message">

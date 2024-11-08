@@ -40,7 +40,7 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     'nuxt-security',
     '@nuxtjs/device',
-    '@nuxtjs/mdc',
+    '@sunshj/mdc',
     '@nuxtjs/color-mode'
   ],
 
@@ -55,18 +55,6 @@ export default defineNuxtConfig({
 
   vueuse: {
     ssrHandlers: true
-  },
-
-  mdc: {
-    highlight: {
-      theme: {
-        default: 'github-light-default',
-        dark: 'github-dark-default'
-      }
-    },
-    headings: {
-      anchorLinks: false
-    }
   },
 
   piniaPluginPersistedstate: {

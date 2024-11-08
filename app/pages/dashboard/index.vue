@@ -80,7 +80,7 @@
 
           <ElTableColumn type="expand">
             <template #default="{ row }">
-              <MDC :value="row.content" class="border border-gray-200 border-solid" />
+              <MDC :value="row.content" class="border border-gray-200 border-solid p-2" />
             </template>
           </ElTableColumn>
         </ElTableColumn>

@@ -10,7 +10,7 @@
         <ElPopover placement="bottom" width="fit-content" trigger="click">
           <template #reference>
             <div class="m-2 flex-center cursor-pointer">
-              <IconInfo class="text-xl text-gray-300" />
+              <Icon name="lucide:info" class="text-xl icon-primary" />
             </div>
           </template>
 
@@ -21,10 +21,12 @@
 
         <template #fallback>
           <div class="m-2 flex-center cursor-pointer">
-            <IconInfo class="text-xl text-gray-300" />
+            <Icon name="lucide:info" class="text-xl icon-primary" />
           </div>
         </template>
       </ClientOnly>
+
+      <ColorModeButton />
 
       <ClientOnly>
         <ElDropdown>
