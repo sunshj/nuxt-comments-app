@@ -11,7 +11,7 @@
         v-model="form.message"
         type="textarea"
         :autosize="{ minRows: 2, maxRows: 6 }"
-        :maxlength="512"
+        :maxlength="1024"
         show-word-limit
         :placeholder="placeholder"
         @keydown.ctrl.enter="send()"

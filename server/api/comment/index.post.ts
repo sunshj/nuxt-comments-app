@@ -4,7 +4,7 @@ const schema = z.object({
   url: z.string({ required_error: 'url is required' }).min(1),
   userId: z.number({ required_error: 'userId is required' }).int(),
   parentId: z.number().int().or(literal(null)).default(null),
-  content: z.string({ required_error: 'content is required' }).min(1).max(512)
+  content: z.string({ required_error: 'content is required' }).min(1).max(1024)
 })
 
 export default defineEventHandler(async event => {

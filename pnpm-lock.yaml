@@ -23,8 +23,8 @@ importers:
         specifier: 5.21.1
         version: 5.21.1(prisma@5.21.1)
       '@sunshj/mdc':
-        specifier: ^0.0.2
-        version: 0.0.2(ioredis@5.4.1)(magicast@0.3.5)(rollup@4.24.3)(vite@5.4.10(@types/node@22.8.5)(terser@5.36.0))(vue@3.5.12(typescript@5.6.3))(webpack-sources@3.2.3)
+        specifier: ^0.1.1
+        version: 0.1.1(ioredis@5.4.1)(magicast@0.3.5)(rollup@4.24.3)(vite@5.4.10(@types/node@22.8.5)(terser@5.36.0))(vue@3.5.12(typescript@5.6.3))(webpack-sources@3.2.3)
       '@vueuse/core':
         specifier: ^11.2.0
         version: 11.2.0(vue@3.5.12(typescript@5.6.3))
@@ -1282,8 +1282,8 @@ packages:
     peerDependencies:
       eslint: ^9.10.0
 
-  '@sunshj/mdc@0.0.2':
-    resolution: {integrity: sha512-8rQturBEeQt4PolOwSC4C3jF/H4TjZtegaWArc6OCvFduFT7ptXJ5+YP+qaGPDGAjyxZE/xP2Lz50zpYm3jDRA==}
+  '@sunshj/mdc@0.1.1':
+    resolution: {integrity: sha512-jToB8haKadcmGFr8/F6QiHFp8gutaXytekg85HwJ7GQwncg1JLEGgVizQhsHemojNt5WA5jq/Q8NEUW8I0VyGQ==}
 
   '@sunshj/prettier-config@1.0.1':
     resolution: {integrity: sha512-C8Wlmrdza07BGl5UeF15Jdcuq+65Ou/Gklr/0SRwv2yy5qHykHjteZGaBVCE+mcx8xOkaj0quNYSJXAMcBgzuQ==}
@@ -6757,7 +6757,7 @@ snapshots:
       - svelte-eslint-parser
       - typescript
 
-  '@sunshj/mdc@0.0.2(ioredis@5.4.1)(magicast@0.3.5)(rollup@4.24.3)(vite@5.4.10(@types/node@22.8.5)(terser@5.36.0))(vue@3.5.12(typescript@5.6.3))(webpack-sources@3.2.3)':
+  '@sunshj/mdc@0.1.1(ioredis@5.4.1)(magicast@0.3.5)(rollup@4.24.3)(vite@5.4.10(@types/node@22.8.5)(terser@5.36.0))(vue@3.5.12(typescript@5.6.3))(webpack-sources@3.2.3)':
     dependencies:
       '@iconify-json/lucide': 1.2.12
       '@iconify-json/vscode-icons': 1.2.2
