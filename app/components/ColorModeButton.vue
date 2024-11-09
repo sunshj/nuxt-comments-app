@@ -1,12 +1,11 @@
 <template>
-  <ElButton
-    link
-    class="text-xl icon-primary"
-    @click="$colorMode.preference = $colorMode.preference === 'light' ? 'dark' : 'light'"
-  >
-    <Icon v-if="$colorMode.value === 'light'" name="lucide:sun" />
-    <Icon v-else name="lucide:moon" />
+  <ElButton link class="text-xl icon-primary" @click="$colorMode.preference = next()">
+    <Icon v-if="$colorMode.preference === 'light'" name="lucide:sun" />
+    <Icon v-else-if="$colorMode.preference === 'dark'" name="lucide:moon" />
+    <Icon v-else name="lucide:sun-moon" />
   </ElButton>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+const { next } = useCycleList(['system', 'light', 'dark'])
+</script>
