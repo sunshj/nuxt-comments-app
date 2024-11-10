@@ -80,7 +80,10 @@
 
           <ElTableColumn type="expand">
             <template #default="{ row }">
-              <MDC :value="row.content" class="border border-gray-200 border-solid p-2" />
+              <div class="relative border border-gray-200 border-solid bg-gray-100 p-2">
+                <CodeCopy class="absolute right-5 top-3" :code="row.content" />
+                <pre>{{ row.content }}</pre>
+              </div>
             </template>
           </ElTableColumn>
         </ElTableColumn>

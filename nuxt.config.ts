@@ -44,6 +44,12 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode'
   ],
 
+  icon: {
+    clientBundle: {
+      scan: true
+    }
+  },
+
   colorMode: {
     classSuffix: '',
     storage: 'cookie'

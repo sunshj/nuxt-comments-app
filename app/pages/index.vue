@@ -64,9 +64,4 @@ whenever(error, () => {
 
 const focused = useWindowFocus()
 whenever(focused, () => refresh())
-
-const bus = useEventBus('mdc:copied')
-bus.on(() => {
-  ElMessage.success('copied')
-})
 </script>

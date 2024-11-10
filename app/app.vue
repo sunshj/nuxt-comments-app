@@ -9,6 +9,11 @@
 
 <script lang="ts" setup>
 import locale from 'element-plus/es/locale/lang/zh-cn'
+
+const bus = useEventBus('mdc:copied')
+bus.on(() => {
+  ElMessage.success('copied')
+})
 </script>
 
 <style>
