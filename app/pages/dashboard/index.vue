@@ -80,7 +80,7 @@
 
           <ElTableColumn type="expand">
             <template #default="{ row }">
-              <div class="relative border border-gray-200 border-solid bg-gray-100 p-2">
+              <div class="relative p-2 bg-secondary">
                 <CodeCopy class="absolute right-5 top-3" :code="row.content" />
                 <pre>{{ row.content }}</pre>
               </div>
@@ -222,3 +222,9 @@ function confirmDelete(ids: number[]) {
     })
 }
 </script>
+
+<style>
+.el-table__expanded-cell {
+  padding: 0 !important;
+}
+</style>
