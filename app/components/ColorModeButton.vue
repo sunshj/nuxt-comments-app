@@ -7,5 +7,6 @@
 </template>
 
 <script lang="ts" setup>
-const { next } = useCycleList(['system', 'light', 'dark'])
+const colorMode = useColorMode()
+const { next } = useCycleList(['system', 'light', 'dark'], { initialValue: colorMode.preference })
 </script>
