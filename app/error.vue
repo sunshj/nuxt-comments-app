@@ -14,6 +14,7 @@
 </template>
 
 <script lang="ts" setup>
+import { destr } from 'destr'
 import type { NuxtError } from '#app'
 
 useServerHead({
@@ -25,7 +26,7 @@ const { error } = defineProps<{ error: NuxtError<any> }>()
 const { statusCode, statusMessage, message, data } = toRefs(
   reactive({
     ...error,
-    data: typeof error.data === 'string' ? JSON.parse(error.data) : error.data
+    data: destr<any>(error.data)
   })
 )
 </script>

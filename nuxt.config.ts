@@ -40,15 +40,12 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     'nuxt-security',
     '@nuxtjs/device',
+    '@nuxt/image',
+    '@nuxt/icon',
     '@sunshj/mdc',
+    '@nuxtjs/mdc',
     '@nuxtjs/color-mode'
   ],
-
-  icon: {
-    clientBundle: {
-      scan: true
-    }
-  },
 
   colorMode: {
     classSuffix: '',
